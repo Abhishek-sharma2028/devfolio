@@ -472,36 +472,74 @@ function finishGoogleSignIn(response) {
       builderModal.querySelector('input')?.focus();
     }, 700);
 }
+async function finishGoogleTokenSignIn(response) {
+  if (response.error) {
+    loginStatus.textContent = `Google sign-in was cancelled or blocked (${response.error}).`;
+    loginStatus.classList.remove('success');
+    return;
+  }
+  if (!response.access_token) {
+    loginStatus.textContent = 'Google did not return an access token. Check the OAuth consent screen and test users.';
+    loginStatus.classList.remove('success');
+    return;
+  }
+  try {
+    const profileResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${response.access_token}` }
+    });
+    if (!profileResponse.ok) throw new Error(`userinfo_${profileResponse.status}`);
+    const profile = await profileResponse.json();
+    if (!profile.email) throw new Error('missing_email');
+    localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify({
+      provider: 'google',
+      email: profile.email,
+      name: profile.name || '',
+      picture: profile.picture || '',
+      signedInAt: new Date().toISOString()
+    }));
+    loginStatus.textContent = `Signed in with Google as ${profile.name || profile.email}.`;
+    loginStatus.classList.add('success');
+    document.querySelector('.login-link').textContent = 'Account';
+    showToast('Google account connected');
+    setTimeout(() => {
+      closeLogin();
+      builderModal.classList.add('open');
+      builderModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      builderModal.querySelector('input')?.focus();
+    }, 700);
+  } catch (error) {
+    loginStatus.textContent = `Google sign-in returned an invalid profile (${error.message}).`;
+    loginStatus.classList.remove('success');
+  }
+}
 function loadGoogleIdentityServices() {
     if (!GOOGLE_CLIENT_ID) {
       loginStatus.textContent = 'Add your Google OAuth Web client ID to enable Google sign-in.';
       loginStatus.classList.remove('success');
       return;
     }
-    const renderGoogleButton = () => {
-      if (!window.google?.accounts?.id) return;
-      window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: finishGoogleSignIn });
-      const container = document.querySelector('#google-button-container');
-      if (container && !container.childElementCount) {
-        window.google.accounts.id.renderButton(container, {
-          type: 'standard',
-          theme: 'outline',
-          size: 'large',
-          text: 'signin_with',
-          shape: 'rectangular',
-          width: Math.min(390, Math.max(240, container.parentElement?.clientWidth || 320))
-        });
+    const initializeGoogle = () => {
+      if (!window.google?.accounts?.oauth2) return;
+      if (!window.google.accounts.oauth2) {
+        loginStatus.textContent = 'Google OAuth is unavailable in this browser.';
+        return;
       }
+      window.googleTokenClient = window.google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'openid email profile',
+        callback: finishGoogleTokenSignIn
+      });
     };
-    if (window.google?.accounts?.id) {
-      renderGoogleButton();
+    if (window.google?.accounts?.oauth2) {
+      initializeGoogle();
       return;
     }
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
-    script.onload = renderGoogleButton;
+    script.onload = initializeGoogle;
     script.onerror = () => {
       loginStatus.textContent = 'Google sign-in could not load. Check your connection and try again.';
       loginStatus.classList.remove('success');
@@ -608,7 +646,12 @@ connectDemo?.addEventListener('click', () => {
   builderModal.querySelector('input')?.focus();
   showToast('Local account connected');
 });
-googleSignIn?.addEventListener('click', loadGoogleIdentityServices);
+googleSignIn?.addEventListener('click', () => {
+  if (!window.googleTokenClient) loadGoogleIdentityServices();
+  window.setTimeout(() => {
+    if (window.googleTokenClient) window.googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+  }, 250);
+});
 
 function openProfile(card) {
   profileModalTitle.textContent = card.dataset.profileName;
