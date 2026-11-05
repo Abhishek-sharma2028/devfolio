@@ -424,6 +424,7 @@ function openLogin() {
   loginModal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open');
   loginModal.querySelector('input')?.focus();
+  loadGoogleIdentityServices();
 }
 function showToast(message) {
   let toast = document.querySelector('.app-toast');
@@ -463,7 +464,13 @@ function finishGoogleSignIn(response) {
     loginStatus.classList.add('success');
     document.querySelector('.login-link').textContent = 'Account';
     showToast('Google account connected');
-    setTimeout(closeLogin, 700);
+    setTimeout(() => {
+      closeLogin();
+      builderModal.classList.add('open');
+      builderModal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      builderModal.querySelector('input')?.focus();
+    }, 700);
 }
 function loadGoogleIdentityServices() {
     if (!GOOGLE_CLIENT_ID) {
@@ -485,11 +492,6 @@ function loadGoogleIdentityServices() {
           width: Math.min(390, Math.max(240, container.parentElement?.clientWidth || 320))
         });
       }
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed?.() && notification.getNotDisplayedReason) {
-          loginStatus.textContent = 'Use the Google button above to continue. One Tap is unavailable in this browser.';
-        }
-      });
     };
     if (window.google?.accounts?.id) {
       renderGoogleButton();
