@@ -50,6 +50,7 @@ const loginModal = document.querySelector('#login');
 const loginForm = document.querySelector('#login-form');
 const loginStatus = document.querySelector('.login-status');
 const connectDemo = document.querySelector('#connect-demo');
+const googleSignIn = document.querySelector('#google-signin');
 const portfolioModal = document.querySelector('#portfolio-modal');
 const portfolioStages = document.querySelectorAll('[data-portfolio-stage]');
 const portfolioStageArt = document.querySelector('#portfolio-stage-art');
@@ -77,6 +78,7 @@ let portfolioTouchStartY = null;
 let portfolioWheelLocked = false;
 const PROFILE_STORAGE_KEY = 'devfolio-profiles-v1';
 const ACCOUNT_STORAGE_KEY = 'devfolio-account-v1';
+const GOOGLE_CLIENT_ID = document.body.dataset.googleClientId || '';
 
 const projectData = {
   'campus-connect': { label: 'CASE STUDY / 01', title: 'Campus Connect', rating: '4.9', likes: '312 appreciations', summary: 'A social map for finding your people on campus, designed around the first hello and built for the long haul.', role: 'Product design + full-stack', stack: 'React · Django · Mapbox', year: '2024', impact: '2.4k student sign-ups', story: 'Students were joining clubs, hackathons, and study groups across disconnected channels. Campus Connect turns that fragmented experience into a warm, searchable map where shared interests become an invitation.', highlights: ['Interest-based discovery and map experience', 'Realtime project calls and team matching', 'Accessible onboarding tested with 18 students'], image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=90', link: 'https://github.com/' },
@@ -435,6 +437,59 @@ function showToast(message) {
   clearTimeout(showToast.timeout);
   showToast.timeout = setTimeout(() => toast.classList.remove('show'), 2200);
 }
+function decodeGoogleCredential(credential) {
+    try {
+      const payload = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(decodeURIComponent(escape(atob(payload))));
+    } catch {
+      return null;
+    }
+}
+function finishGoogleSignIn(response) {
+    const profile = decodeGoogleCredential(response.credential);
+    if (!profile?.email) {
+      loginStatus.textContent = 'Google returned an invalid identity response.';
+      loginStatus.classList.remove('success');
+      return;
+    }
+    localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify({
+      provider: 'google',
+      email: profile.email,
+      name: profile.name || '',
+      picture: profile.picture || '',
+      signedInAt: new Date().toISOString()
+    }));
+    loginStatus.textContent = `Signed in with Google as ${profile.name || profile.email}.`;
+    loginStatus.classList.add('success');
+    document.querySelector('.login-link').textContent = 'Account';
+    showToast('Google account connected');
+    setTimeout(closeLogin, 700);
+}
+function loadGoogleIdentityServices() {
+    if (!GOOGLE_CLIENT_ID) {
+      loginStatus.textContent = 'Add your Google OAuth Web client ID to enable Google sign-in.';
+      loginStatus.classList.remove('success');
+      return;
+    }
+    if (window.google?.accounts?.id) {
+      window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: finishGoogleSignIn });
+      window.google.accounts.id.prompt();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: finishGoogleSignIn });
+      window.google.accounts.id.prompt();
+    };
+    script.onerror = () => {
+      loginStatus.textContent = 'Google sign-in could not load. Check your connection and try again.';
+      loginStatus.classList.remove('success');
+    };
+    document.head.appendChild(script);
+}
 function openProject(projectId) {
   const project = projectData[projectId];
   if (!project || !projectModal) return;
@@ -535,6 +590,7 @@ connectDemo?.addEventListener('click', () => {
   builderModal.querySelector('input')?.focus();
   showToast('Local account connected');
 });
+googleSignIn?.addEventListener('click', loadGoogleIdentityServices);
 
 function openProfile(card) {
   profileModalTitle.textContent = card.dataset.profileName;
