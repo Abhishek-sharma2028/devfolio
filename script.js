@@ -471,19 +471,35 @@ function loadGoogleIdentityServices() {
       loginStatus.classList.remove('success');
       return;
     }
-    if (window.google?.accounts?.id) {
+    const renderGoogleButton = () => {
+      if (!window.google?.accounts?.id) return;
       window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: finishGoogleSignIn });
-      window.google.accounts.id.prompt();
+      const container = document.querySelector('#google-button-container');
+      if (container && !container.childElementCount) {
+        window.google.accounts.id.renderButton(container, {
+          type: 'standard',
+          theme: 'outline',
+          size: 'large',
+          text: 'signin_with',
+          shape: 'rectangular',
+          width: Math.min(390, Math.max(240, container.parentElement?.clientWidth || 320))
+        });
+      }
+      window.google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed?.() && notification.getNotDisplayedReason) {
+          loginStatus.textContent = 'Use the Google button above to continue. One Tap is unavailable in this browser.';
+        }
+      });
+    };
+    if (window.google?.accounts?.id) {
+      renderGoogleButton();
       return;
     }
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
     script.defer = true;
-    script.onload = () => {
-      window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: finishGoogleSignIn });
-      window.google.accounts.id.prompt();
-    };
+    script.onload = renderGoogleButton;
     script.onerror = () => {
       loginStatus.textContent = 'Google sign-in could not load. Check your connection and try again.';
       loginStatus.classList.remove('success');
