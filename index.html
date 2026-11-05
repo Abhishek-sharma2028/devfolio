@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f6f2" />
+    <meta
+      name="description"
+      content="Devfolio — a beautiful student developer portfolio and collaboration hub."
+    />
+    <title>Devfolio — Make your work impossible to miss</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-noise" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Devfolio home">
+        <span class="brand-mark">D</span>
+        <span>devfolio<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a class="nav-link active" href="#home">Home</a>
+        <a class="nav-link" href="#choose">Choose a style</a>
+        <a class="nav-link" href="#explore">Explore</a>
+        <a class="nav-link" href="#portfolio">Portfolio</a>
+        <a class="nav-link" href="#person-demo">About me</a>
+        <a class="nav-link" href="#collaborate">Collaborate</a>
+        <a class="nav-link" href="#dashboard">Dashboard</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-button theme-toggle" type="button" aria-label="Toggle color theme">
+          <span class="sun-icon">☼</span>
+        </button>
+        <a class="login-link open-login" href="#login">Log in</a>
+        <a class="button button-dark button-small open-builder" href="#builder">Create portfolio <span>↗</span></a>
+      </div>
+      <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero section-snap" id="home">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><span class="eyebrow-line"></span> The student developer network</div>
+          <h1>Make your work<br />feel <em>unforgettable.</em></h1>
+          <p class="hero-text">
+            One thoughtful home for the projects you build, the skills you grow, and the people you want to build with.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-dark open-builder" href="#builder">Build your devfolio <span>↗</span></a>
+            <a class="text-link" href="#explore">Explore student work <span>↓</span></a>
+          </div>
+          <div class="hero-trust">
+            <div class="avatar-stack" aria-hidden="true">
+              <span class="avatar avatar-one">A</span><span class="avatar avatar-two">R</span><span class="avatar avatar-three">S</span><span class="avatar avatar-four">+</span>
+            </div>
+            <span>Join <strong>2,400+</strong> student builders</span>
+          </div>
+        </div>
+        <div class="hero-art reveal reveal-delay">
+          <div class="art-orbit orbit-one"></div>
+          <div class="art-orbit orbit-two"></div>
+          <div class="art-card profile-card float-one">
+            <div class="profile-top">
+              <span class="status-dot"></span><span>available to collaborate</span><span class="more">•••</span>
+            </div>
+            <div class="profile-identity">
+              <div class="profile-photo">AS</div>
+              <div><h3>Arjun Sharma</h3><p>Full-stack developer</p></div>
+            </div>
+            <div class="profile-location">⌖ New Delhi, India</div>
+            <div class="skill-row"><span>React</span><span>Python</span><span>Figma</span></div>
+            <div class="profile-footer"><span>12 projects</span><span>↗ view profile</span></div>
+          </div>
+          <div class="art-card code-card float-two">
+            <div class="code-head"><span class="window-dot red"></span><span class="window-dot yellow"></span><span class="window-dot green"></span><span>portfolio.py</span></div>
+            <div class="code-lines"><p><i>01</i> <b>class</b> <strong>Developer</strong>:</p><p><i>02</i> &nbsp;&nbsp; passion = <mark>"always"</mark></p><p><i>03</i> &nbsp;&nbsp; projects = <mark>∞</mark></p><p><i>04</i> &nbsp;&nbsp; <span class="code-comment"># ship something good</span></p></div>
+          </div>
+          <div class="art-note float-three"><span>✦</span><p>Find your<br /><em>people.</em></p></div>
+          <div class="hero-sticker">SCROLL<br /><span>↓</span></div>
+        </div>
+        <a class="scroll-cue" href="#explore"><span class="scroll-wheel"></span> Scroll to explore</a>
+      </section>
+
+      <section class="marquee-band" aria-label="Devfolio features">
+        <div class="marquee-track"><span>SHOWCASE YOUR CRAFT</span><b>✳</b><span>FIND YOUR PEOPLE</span><b>✳</b><span>BUILD SOMETHING GOOD</span><b>✳</b><span>SHOWCASE YOUR CRAFT</span><b>✳</b></div>
+      </section>
+
+      <section class="type-picker" id="choose">
+        <div class="picker-heading reveal"><span class="eyebrow"><span class="eyebrow-line"></span> Start with your point of view</span><h2>Choose the portfolio<br /><em>that feels like you.</em></h2><p>Pick a direction. We’ll shape the motion, rhythm, and story around the way you want to be remembered.</p></div>
+        <div class="picker-cards">
+          <button class="type-card type-editorial active reveal" data-type="editorial"><span class="type-index">01</span><span class="type-card-art"><i></i><b>THE<br /><em>EDITORIAL</em></b></span><strong>Editorial / creative</strong><small>For designers, storytellers, and makers with a point of view.</small><span class="type-arrow">↗</span></button>
+          <button class="type-card type-cinema reveal reveal-delay" data-type="cinema"><span class="type-index">02</span><span class="type-card-art"><i></i><b>THE<br /><em>CINEMA</em></b></span><strong>Cinematic / immersive</strong><small>For work that deserves a full-screen entrance and a slow reveal.</small><span class="type-arrow">↗</span></button>
+          <button class="type-card type-minimal reveal reveal-delay-2" data-type="minimal"><span class="type-index">03</span><span class="type-card-art"><i></i><b>THE<br /><em>MINIMAL</em></b></span><strong>Minimal / precise</strong><small>For clean thinking, sharp systems, and quiet confidence.</small><span class="type-arrow">↗</span></button>
+          <button class="type-card type-playful reveal reveal-delay-3" data-type="playful"><span class="type-index">04</span><span class="type-card-art"><i></i><b>THE<br /><em>PLAYFUL</em></b></span><strong>Playful / expressive</strong><small>For bright ideas, bold experiments, and joyful energy.</small><span class="type-arrow">↗</span></button>
+        </div>
+        <div class="picker-footer"><span>01 — 04</span><i><b></b></i><span>YOUR STORY, YOUR WAY</span></div>
+      </section>
+
+      <section class="explore section-snap" id="explore">
+        <div class="section-heading reveal">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span> Discover the new</div><h2>Small projects.<br /><em>Big energy.</em></h2></div>
+          <p>See what other students are making, learn from their process, and get inspired to start your next thing.</p>
+        </div>
+        <div class="filter-row reveal">
+          <div class="filter-tabs" role="tablist">
+            <button class="filter-tab active" data-filter="all">All projects</button>
+            <button class="filter-tab" data-filter="web">Web & app</button>
+            <button class="filter-tab" data-filter="ai">AI & data</button>
+            <button class="filter-tab" data-filter="design">Design</button>
+          </div>
+          <button class="filter-sort" type="button" data-sort="loved">Most loved <span>⌄</span></button>
+        </div>
+        <div class="project-grid">
+          <article class="project-card project-large project-card-link reveal" tabindex="0" role="button" data-category="web" data-project-id="pulse">
+            <div class="project-visual visual-neon"><div class="visual-window"><div class="mini-nav"><span>pulse</span><small>Productivity, reimagined.</small></div><div class="pulse-chart"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><strong>Good work<br /><em>flows.</em></strong></div><span class="visual-label">01 / featured</span></div>
+            <div class="project-meta"><div><h3>Pulse — a calmer way to focus</h3><p>by <b>Riya Malhotra</b> · 2 days ago</p></div><button class="heart-button" aria-label="Like Pulse">♡</button></div>
+            <div class="tag-row"><span>React</span><span>Node.js</span><span>Productivity</span></div>
+          </article>
+          <article class="project-card project-card-link reveal reveal-delay" tabindex="0" role="button" data-category="ai" data-project-id="soft-systems">
+            <div class="project-visual visual-sky"><div class="sky-orb"></div><div class="sky-ui"><span>moodboard / 04</span><b>soft<br />systems</b></div><span class="visual-label">02 / visual ai</span></div>
+            <div class="project-meta"><div><h3>Soft Systems</h3><p>by <b>Kabir Anand</b> · 5 days ago</p></div><button class="heart-button" aria-label="Like Soft Systems">♡</button></div>
+            <div class="tag-row"><span>Python</span><span>OpenCV</span></div>
+          </article>
+          <article class="project-card project-card-link reveal" tabindex="0" role="button" data-category="design" data-project-id="good-things">
+            <div class="project-visual visual-orange"><div class="orange-type">good<br /><em>things</em><small>take time.</small></div><span class="visual-label">03 / editorial</span></div>
+            <div class="project-meta"><div><h3>Good Things Take Time</h3><p>by <b>Meera Joshi</b> · 1 week ago</p></div><button class="heart-button" aria-label="Like Good Things Take Time">♡</button></div>
+            <div class="tag-row"><span>Figma</span><span>Branding</span></div>
+          </article>
+        </div>
+        <a class="outline-link" href="#portfolio">See all projects <span>↗</span></a>
+      </section>
+
+      <section class="project-cinema" id="portfolio">
+        <div class="cinema-stage">
+          <div class="cinema-topline"><span>ARJUN SHARMA / SELECTED WORK</span><span>SCROLL TO PLAY <b>↓</b></span></div>
+          <div class="cinema-intro"><span class="eyebrow light"><span class="eyebrow-line"></span> A portfolio, not a profile</span><h2>Projects with<br /><em>a pulse.</em></h2><p>Three stories about making useful things feel unforgettable.</p></div>
+          <div class="cinema-track">
+            <article class="scene scene-one">
+              <div class="scene-image"><div class="scene-image-glow"></div><div class="scene-ui"><span>01 / 03</span><b>campus<br /><em>connect</em></b><small>Find your people.</small></div></div>
+              <div class="scene-copy"><span class="scene-kicker">01 — SOCIAL PLATFORM</span><h3>Campus Connect</h3><p>A social map for finding your people on campus. Designed for the first hello and built for the long haul.</p><div class="scene-meta"><span>React / Django</span><span>2024</span><button class="scene-case-study" type="button" data-project-id="campus-connect">View case study ↗</button></div></div>
+            </article>
+            <article class="scene scene-two">
+              <div class="scene-image"><div class="scene-image-glow"></div><div class="scene-ui"><span>02 / 03</span><b>good work<br /><em>flows.</em></b><small>Pulse / focus app</small></div></div>
+              <div class="scene-copy"><span class="scene-kicker">02 — PRODUCTIVITY APP</span><h3>Pulse</h3><p>A calmer way to focus, with ambient sessions and tiny rituals that make deep work easier to return to.</p><div class="scene-meta"><span>Next.js / Node.js</span><span>2024</span><button class="scene-case-study" type="button" data-project-id="pulse">View case study ↗</button></div></div>
+            </article>
+            <article class="scene scene-three">
+              <div class="scene-image"><div class="scene-image-glow"></div><div class="scene-ui"><span>03 / 03</span><b>open<br /><em>notes.</em></b><small>Knowledge, opened.</small></div></div>
+              <div class="scene-copy"><span class="scene-kicker">03 — AI / KNOWLEDGE</span><h3>Open Notes</h3><p>A search-first notebook that turns scattered class notes into a living, shared knowledge base.</p><div class="scene-meta"><span>Python / NLP</span><span>2023</span><button class="scene-case-study" type="button" data-project-id="open-notes">View case study ↗</button></div></div>
+            </article>
+          </div>
+          <div class="cinema-progress"><span class="progress-number">01</span><i><b></b></i><span>03</span></div>
+        </div>
+      </section>
+
+      <section class="person-demo" id="person-demo">
+        <div class="person-hero">
+          <div class="person-topline"><span>DEVFOLIO / PERSONA 01</span><span>CREATIVE DEVELOPER · NEW DELHI</span></div>
+          <div class="person-copy reveal">
+            <span class="eyebrow light"><span class="eyebrow-line"></span> The person behind the pixels</span>
+            <h2>Hi, I’m<br /><em>Arjun.</em></h2>
+            <p>I turn curious ideas into warm, useful digital experiences — with code, taste, and a little bit of chaos.</p>
+            <div class="person-actions"><a class="button button-light" href="#collaborate">Let’s work together <span>↗</span></a><a class="person-scroll" href="#person-story">Meet the maker <span>↓</span></a></div>
+          </div>
+          <div class="portrait-frame reveal reveal-delay">
+            <div class="portrait-image"></div><span class="portrait-stamp">OPEN<br />TO<br />WORK</span><span class="portrait-caption">portrait / 2024</span>
+          </div>
+          <div class="floating-note note-one">currently<br /><em>making</em><b>good things</b></div>
+          <div class="floating-note note-two">✦<br /><small>scroll<br />slowly</small></div>
+        </div>
+        <div class="person-story" id="person-story">
+          <div class="story-heading reveal"><span class="eyebrow"><span class="eyebrow-line"></span> A little context</span><h2>Not just what<br />I make. <em>Why.</em></h2></div>
+          <div class="story-grid">
+            <div class="story-copy reveal"><p class="story-lead">I’m a final-year computer science student who believes the best interfaces feel a little bit like a good song.</p><p>When I’m not building products, I’m probably photographing ordinary corners of the city, collecting type specimens, or asking friends what they would change about the apps they use every day.</p><div class="signature">Arjun Sharma <span>↗</span></div></div>
+            <div class="photo-mosaic reveal reveal-delay">
+              <div class="mosaic-photo mosaic-one"><span>01</span></div><div class="mosaic-photo mosaic-two"><span>02</span></div><div class="mosaic-photo mosaic-three"><span>03</span></div><div class="mosaic-photo mosaic-four"><span>04</span></div>
+            </div>
+          </div>
+          <div class="ticker-line"><div><span>PRODUCT THINKER</span><b>✳</b><span>DETAIL OBSESSED</span><b>✳</b><span>ALWAYS CURIOUS</span><b>✳</b><span>PRODUCT THINKER</span><b>✳</b></div></div>
+        </div>
+        <div class="person-stats">
+          <div class="stat-intro reveal"><span class="eyebrow light"><span class="eyebrow-line"></span> The numbers bit</span><h2>Work with<br /><em>intention.</em></h2></div>
+          <div class="stat-cards reveal reveal-delay"><div><strong>12</strong><span>projects shipped<br />with good people</span></div><div><strong>04</strong><span>years learning<br />in public</span></div><div><strong>∞</strong><span>things still<br />left to explore</span></div></div>
+        </div>
+        <div class="people-roster" id="people-roster">
+          <div class="roster-heading"><div><span class="eyebrow"><span class="eyebrow-line"></span> People on Devfolio</span><h2>Meet the<br /><em>builders.</em></h2></div><p>Real people, real interests, real work. Add your own profile and let the right collaborators find you.</p></div>
+          <div class="roster-grid">
+            <article class="person-card person-card-link" tabindex="0" role="button" data-profile-name="Arjun Sharma" data-profile-role="Full-stack developer / New Delhi" data-profile-bio="Product-minded builder making useful things feel unforgettable." data-profile-pronouns="he / him" data-profile-about="I build warm, useful digital products and document the process in public. I care about thoughtful interfaces, accessible systems, and teams that make space for curiosity." data-profile-skills="React, Python, Figma, Django, Product thinking" data-profile-skill-level="Advanced React · 4 years" data-profile-rating="4.8" data-profile-projects="12" data-profile-years="4" data-profile-availability="Available for work" data-profile-achievements="Winner — Campus Hackathon 2024&#10;Open-source contributor&#10;Speaker — Design &amp; Code Meetup" data-profile-experience="B.Tech Computer Science — 2022–2026&#10;Product intern at Studio North — 2025" data-profile-video="https://www.youtube.com/" data-profile-project-video="https://vimeo.com/" data-profile-email="arjun@example.com" data-profile-website="https://github.com/" data-profile-resume="https://github.com/" data-profile-socials="https://github.com/"><div class="person-card-photo person-photo-arjun">AS</div><div class="person-card-info"><span>FULL-STACK / NEW DELHI</span><h3>Arjun Sharma</h3><p>Product-minded builder making useful things feel unforgettable.</p><div><b>React</b><b>Python</b><b>Figma</b></div><small class="view-profile">Open profile ↗</small></div></article>
+            <article class="person-card person-card-link" tabindex="0" role="button" data-profile-name="Sana Kapoor" data-profile-role="Visual designer / Mumbai" data-profile-bio="Visual designer turning complex systems into clear moments." data-profile-pronouns="she / her" data-profile-about="I translate complex systems into clear, expressive moments through identity, motion, and research. I love turning a messy question into a visual language people can feel." data-profile-skills="Branding, Motion, Research, Art direction, Prototyping" data-profile-skill-level="Advanced motion design · 5 years" data-profile-rating="4.9" data-profile-projects="16" data-profile-years="5" data-profile-availability="Open to collaborations" data-profile-achievements="Featured in Type Directors Club&#10;Mentor — Women Who Design&#10;Winner — Mumbai Design Week identity challenge" data-profile-experience="B.Des Communication Design — 2021–2025&#10;Visual designer at Forma Studio — 2025" data-profile-video="https://www.youtube.com/" data-profile-project-video="https://vimeo.com/" data-profile-email="sana@example.com" data-profile-website="https://behance.net/" data-profile-resume="https://behance.net/" data-profile-socials="https://behance.net/"><div class="person-card-photo person-photo-sana">SK</div><div class="person-card-info"><span>DESIGNER / MUMBAI</span><h3>Sana Kapoor</h3><p>Visual designer turning complex systems into clear moments.</p><div><b>Branding</b><b>Motion</b><b>Research</b></div><small class="view-profile">Open profile ↗</small></div></article>
+            <button class="person-card add-person-card open-builder" type="button"><span class="add-person-plus">+</span><strong>Add your profile</strong><small>Choose a style, share your work, and be discoverable.</small></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="collaborate section-snap" id="collaborate">
+        <div class="collab-visual reveal"><div class="collab-circle"></div><div class="collab-card card-back"><span>01</span><strong>Looking for<br /><em>a designer</em></strong><small>Hackathon · 3 days left</small></div><div class="collab-card card-front"><div class="collab-card-top"><span class="status-pill">open call</span><button class="collab-like" type="button" aria-label="Save collaboration">♡</button></div><strong>Campus<br />Connect</strong><p>A social map for finding your people on campus.</p><div class="collab-author"><span class="tiny-avatar">NK</span><span><b>Nikhil Kapoor</b><small>Delhi · 4 teammates</small></span></div></div><div class="collab-doodle">↗</div></div>
+        <div class="collab-copy reveal reveal-delay"><div class="eyebrow"><span class="eyebrow-line"></span> More than a portfolio</div><h2>Build with people<br />who <em>get it.</em></h2><p>Great ideas rarely happen alone. Find collaborators by skill, explore open project calls, and turn “we should build that” into something real.</p><div class="collab-points"><div><span>01</span><p><b>Post a project call</b><br />Tell the community what you’re making.</p></div><div><span>02</span><p><b>Find your fit</b><br />Search by skills, interests, or vibe.</p></div><div><span>03</span><p><b>Make it happen</b><br />Connect, collaborate, ship.</p></div></div><a class="button button-dark" href="#create">Find your collaborators <span>↗</span></a></div>
+      </section>
+
+      <section class="dashboard section-snap" id="dashboard">
+        <div class="section-heading reveal"><div><div class="eyebrow"><span class="eyebrow-line"></span> Your command center</div><h2>Keep growing.<br /><em>Keep shipping.</em></h2></div><p>Your work deserves more than a folder of links. Track your momentum, keep your profile fresh, and see how far you’ve come.</p></div>
+        <div class="dashboard-shell reveal">
+          <aside class="dash-sidebar"><div class="dash-logo">d<span>.</span></div><span class="dash-avatar">AS</span><nav><a class="dash-active" href="#dashboard">▦ <span>Overview</span></a><a href="#explore">◇ <span>My projects</span></a><a href="#collaborate">◎ <span>Collaborations</span></a><a href="#create">◌ <span>Profile</span></a></nav><a class="dash-settings" href="#create">⚙ <span>Settings</span></a></aside>
+          <div class="dash-main"><div class="dash-top"><div><p class="dash-kicker">Thursday, 05 September</p><h3>Good morning, Arjun <span>✦</span></h3></div><button class="button button-dark button-small open-builder" type="button">+ Add project</button></div><div class="stat-grid"><div class="stat-box"><small>Profile views</small><strong>1,284</strong><span class="positive">↗ 18.4%</span><div class="mini-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="stat-box"><small>Project likes</small><strong>486</strong><span class="positive">↗ 8.2%</span><div class="mini-bars pink"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div class="stat-box"><small>Collab requests</small><strong>12</strong><span class="neutral">this month</span><div class="request-dots"><i></i><i></i><i></i><i></i><i></i></div></div></div><div class="dash-lower"><div class="activity-box"><div class="box-title"><b>Profile activity</b><button class="activity-range" type="button">Last 30 days⌄</button></div><div class="chart"><div class="chart-line"></div><div class="chart-dot"></div><div class="chart-labels"><span>1 Aug</span><span>15 Aug</span><span>30 Aug</span></div></div></div><div class="complete-box"><div class="box-title"><b>Complete your profile</b><span>80%</span></div><div class="progress"><i></i></div><p>Add your education and one more project to stand out.</p><a class="open-builder" href="#builder">Finish setup ↗</a></div></div></div>
+        </div>
+      </section>
+
+      <section class="create section-snap" id="create">
+        <div class="create-inner reveal"><div class="eyebrow light"><span class="eyebrow-line"></span> Your turn</div><h2>Your work is<br /><em>worth showing.</em></h2><p>Start a portfolio that feels like you — not another template.</p><a class="button button-light open-builder" href="#builder">Create your devfolio <span>↗</span></a><div class="create-foot"><span>Free to start</span><span>Built for students</span><span>Made to be shared</span></div></div><div class="create-star">✳</div><div class="create-shape shape-one"></div><div class="create-shape shape-two"></div></section>
+    </main>
+    <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">D</span><span>devfolio<span class="brand-dot">.</span></span></a><p>Make something worth remembering.</p><span>© 2024 Devfolio</span></footer>
+    <div class="mobile-menu" aria-hidden="true"><a href="#home">Home</a><a href="#choose">Choose a style</a><a href="#explore">Explore</a><a href="#portfolio">Portfolio</a><a href="#person-demo">About me</a><a href="#collaborate">Collaborate</a><a href="#dashboard">Dashboard</a><a class="open-builder" href="#builder">Create portfolio ↗</a></div>
+    <div class="builder-modal" id="builder" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="builder-title">
+      <div class="builder-backdrop" data-close-builder></div>
+      <div class="builder-panel">
+        <button class="builder-close" type="button" aria-label="Close builder" data-close-builder>×</button>
+        <div class="builder-kicker"><span class="eyebrow"><span class="eyebrow-line"></span> Add a person</span><span>01 / 02</span></div>
+        <h2 id="builder-title">Make your<br /><em>entrance.</em></h2>
+        <p class="builder-help">This is how you add a person: choose a style, fill in the profile details, and press “Add profile”. Your new card appears in People on Devfolio.</p>
+        <form class="builder-form" id="builder-form">
+          <div class="builder-section-label">Identity &amp; story</div>
+          <div class="builder-form-grid">
+            <label>Name<input name="name" required placeholder="e.g. Maya Singh" /></label>
+            <label>Pronouns <span class="optional">(optional)</span><input name="pronouns" placeholder="she / her" /></label>
+            <label>Role &amp; city<input name="role" required placeholder="e.g. Front-end developer / Delhi" /></label>
+            <label>Availability<select name="availability"><option>Available for work</option><option>Open to collaborations</option><option>Currently focused</option><option>Not available</option></select></label>
+          </div>
+          <label>Short intro<textarea name="bio" required rows="3" placeholder="What do you make, and why should someone remember you?"></textarea></label>
+          <label>Long-form about <span class="optional">(optional)</span><textarea name="about" rows="4" placeholder="Your story, values, interests, and the kind of work you want next..."></textarea></label>
+          <div class="builder-form-grid">
+            <label>Photo URL <span class="optional">(optional)</span><input name="photo" type="url" placeholder="https://images.unsplash.com/..." /></label>
+            <label>Resume / CV URL <span class="optional">(optional)</span><input name="resume" type="url" placeholder="https://..." /></label>
+            <label>Email <span class="optional">(optional)</span><input name="email" type="email" placeholder="hello@example.com" /></label>
+            <label>Website <span class="optional">(optional)</span><input name="website" type="url" placeholder="https://your-site.com" /></label>
+          </div>
+          <div class="builder-section-label">Skills &amp; proof</div>
+          <label>Skills <span class="optional">(comma separated)</span><input name="skills" placeholder="React, Figma, Python, Motion" /></label>
+          <div class="builder-form-grid">
+            <label>Skill level<input name="skillLevel" placeholder="Advanced React · 4 years" /></label>
+            <label>Portfolio rating<input name="rating" type="number" min="1" max="5" step="0.1" value="4.8" /></label>
+            <label>Projects shipped<input name="projectCount" type="number" min="0" placeholder="12" /></label>
+            <label>Years building<input name="years" type="number" min="0" placeholder="4" /></label>
+          </div>
+          <label>Achievements <span class="optional">(one per line)</span><textarea name="achievements" rows="3" placeholder="Winner — Smart India Hackathon 2024&#10;Published a React accessibility guide&#10;Speaker — Design &amp; Code Meetup"></textarea></label>
+          <label>Education &amp; experience <span class="optional">(one per line)</span><textarea name="experience" rows="3" placeholder="B.Tech Computer Science — 2022–2026&#10;Product intern at Studio North — 2025"></textarea></label>
+          <div class="builder-section-label">Showreel</div>
+          <div class="builder-form-grid">
+            <label>Intro video URL <span class="optional">(YouTube/Vimeo)</span><input name="video" type="url" placeholder="https://youtube.com/watch?v=..." /></label>
+            <label>Featured project video <span class="optional">(optional)</span><input name="projectVideo" type="url" placeholder="https://vimeo.com/..." /></label>
+          </div>
+          <label>Social links <span class="optional">(comma separated URLs)</span><input name="socials" placeholder="https://github.com/you, https://behance.net/you" /></label>
+          <div class="builder-section-label">Look &amp; motion</div>
+          <div class="customization-inline">
+            <label>Theme<select name="theme"><option value="aurora">Aurora / electric</option><option value="editorial">Editorial / warm</option><option value="midnight">Midnight / cinematic</option><option value="sherbet">Sherbet / playful</option><option value="monochrome">Monochrome / gallery</option><option value="cyber">Cyber / neon</option><option value="clay">Clay / tactile</option><option value="paper">Paper / calm</option></select></label>
+            <label>Motion<select name="motion"><option value="cinematic">Cinematic scroll</option><option value="elastic">Elastic reveal</option><option value="minimal">Minimal drift</option></select></label>
+          </div>
+          <div class="theme-swatch-grid" aria-label="Visual theme presets">
+            <button type="button" class="theme-swatch active" data-theme-choice="aurora"><i></i><strong>Aurora</strong><small>Electric · Next</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="editorial"><i></i><strong>Editorial</strong><small>Warm · Scroll</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="midnight"><i></i><strong>Midnight</strong><small>Cinematic · Next</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="sherbet"><i></i><strong>Sherbet</strong><small>Playful · Scroll</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="monochrome"><i></i><strong>Monochrome</strong><small>Gallery · Next</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="cyber"><i></i><strong>Cyber</strong><small>Neon · Video</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="clay"><i></i><strong>Clay</strong><small>Tactile · Video</small></button>
+            <button type="button" class="theme-swatch" data-theme-choice="paper"><i></i><strong>Paper</strong><small>Calm · Scroll</small></button>
+          </div>
+          <div class="builder-actions"><button class="button button-dark" type="submit">Add profile <span>↗</span></button><button class="builder-cancel" type="button" data-close-builder>Maybe later</button></div>
+        </form>
+        <p class="builder-status" role="status"></p>
+      </div>
+    </div>
+    <div class="login-modal" id="login" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="login-title">
+        <div class="login-modal-backdrop" data-close-login></div>
+        <div class="login-modal-panel">
+          <button class="builder-close" type="button" aria-label="Close login" data-close-login>×</button>
+          <span class="eyebrow"><span class="eyebrow-line"></span> Welcome back</span>
+          <h2 id="login-title">Sign in to<br /><em>your space.</em></h2>
+          <p>Save your portfolio, sync your profile, and keep every project ready to share.</p>
+          <button class="demo-connect" type="button" id="connect-demo"><span>✦</span> Continue with local account <b>↗</b></button>
+          <div class="login-divider"><span>or use email</span></div>
+          <form class="login-form" id="login-form">
+            <label>Email<input type="email" name="email" required placeholder="you@example.com" /></label>
+            <label>Password<input type="password" name="password" required minlength="6" placeholder="••••••••" /></label>
+            <button class="button button-dark" type="submit">Sign in <span>↗</span></button>
+          </form>
+          <p class="login-status" role="status"></p>
+          <small class="login-note">Your account is stored securely in this browser for this static site. Use any valid email and a six-character password.</small>
+        </div>
+      </div>
+      <div class="project-modal" id="project-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
+        <div class="project-modal-backdrop" data-close-project></div>
+        <div class="project-modal-panel">
+          <button class="builder-close" type="button" aria-label="Close project" data-close-project>×</button>
+          <div class="project-modal-hero" id="project-modal-hero"><span class="project-modal-play">▶</span><span class="project-modal-label" id="project-modal-label">CASE STUDY / 01</span></div>
+          <div class="project-modal-body">
+            <div class="project-modal-heading"><div><span class="eyebrow"><span class="eyebrow-line"></span> Detailed project</span><h2 id="project-modal-title">Pulse</h2></div><div class="project-rating"><strong id="project-modal-rating">4.9</strong><span>★★★★★</span><small id="project-modal-likes">486 appreciations</small></div></div>
+            <p id="project-modal-summary"></p>
+            <div class="project-modal-grid"><div><span>ROLE</span><strong id="project-modal-role"></strong></div><div><span>STACK</span><strong id="project-modal-stack"></strong></div><div><span>YEAR</span><strong id="project-modal-year"></strong></div><div><span>IMPACT</span><strong id="project-modal-impact"></strong></div></div>
+            <div class="project-modal-columns"><div><h3>The story</h3><p id="project-modal-story"></p></div><div><h3>Highlights</h3><ul id="project-modal-highlights"></ul></div></div>
+            <a class="button button-dark" id="project-modal-link" href="#" target="_blank" rel="noreferrer">Open live project <span>↗</span></a>
+          </div>
+        </div>
+      </div>
+    <div class="profile-modal" id="profile-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+      <div class="profile-modal-backdrop" data-close-profile></div>
+      <div class="profile-modal-panel">
+        <button class="builder-close" type="button" aria-label="Close profile" data-close-profile>×</button>
+        <div class="profile-modal-photo" id="profile-modal-photo">AS</div>
+        <span class="eyebrow"><span class="eyebrow-line"></span> Devfolio profile</span>
+        <h2 id="profile-modal-title">Arjun Sharma</h2>
+        <p class="profile-modal-pronouns" id="profile-modal-pronouns"></p>
+        <p class="profile-modal-role" id="profile-modal-role"></p>
+        <p class="profile-modal-bio" id="profile-modal-bio"></p>
+        <div class="profile-modal-about"><h3>About</h3><p id="profile-modal-about"></p></div>
+        <div class="profile-modal-proof"><div><strong id="profile-modal-rating">4.8</strong><span>portfolio rating</span></div><div><strong id="profile-modal-projects">12</strong><span>projects shipped</span></div><div><strong id="profile-modal-status">Available</strong><span>current status</span></div></div>
+        <div class="profile-modal-details"><div><h3>Skills &amp; level</h3><div class="profile-modal-skills" id="profile-modal-skills"></div><p class="profile-modal-level" id="profile-modal-level"></p></div><div><h3>Building for</h3><p class="profile-modal-years" id="profile-modal-years"></p></div></div>
+        <div class="profile-modal-columns"><div><h3>Education &amp; experience</h3><ul id="profile-modal-experience"></ul></div><div><h3>Selected proof</h3><ul id="profile-modal-achievements"></ul></div></div>
+        <div class="profile-modal-links" id="profile-modal-links"></div>
+        <div class="profile-modal-showreel" id="profile-modal-showreel"></div>
+        <a class="button button-dark" href="#create" data-close-profile>Invite to collaborate <span>↗</span></a>
+      </div>
+    </div>
+    <div class="portfolio-modal" id="portfolio-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="portfolio-title">
+      <div class="portfolio-backdrop" data-close-portfolio></div>
+      <div class="portfolio-shell">
+        <button class="portfolio-close" type="button" aria-label="Close portfolio" data-close-portfolio>×</button>
+        <div class="portfolio-progress"><span id="portfolio-step-label">01 / 05</span><i><b id="portfolio-step-progress"></b></i><span>PORTFOLIO FILM</span></div>
+        <div class="portfolio-stage" data-portfolio-stage="0">
+          <div class="portfolio-stage-art" id="portfolio-stage-art"></div>
+          <div class="portfolio-stage-copy">
+            <span class="eyebrow light"><span class="eyebrow-line"></span> A living portfolio</span>
+            <p class="portfolio-index">01 — INTRODUCTION</p>
+            <h2 id="portfolio-title">Arjun<br /><em>Sharma.</em></h2>
+            <p id="portfolio-intro"></p>
+            <div class="portfolio-meta"><span id="portfolio-role"></span><span id="portfolio-location"></span></div>
+          </div>
+        </div>
+        <div class="portfolio-stage portfolio-stage-journey" data-portfolio-stage="1">
+          <div class="portfolio-stage-copy">
+            <span class="eyebrow light"><span class="eyebrow-line"></span> The journey</span>
+            <p class="portfolio-index">02 — TIMELINE</p>
+            <h2>How the<br /><em>story moved.</em></h2>
+            <div class="journey-timeline" id="portfolio-timeline"></div>
+          </div>
+        </div>
+        <div class="portfolio-stage portfolio-stage-work" data-portfolio-stage="2">
+          <div class="portfolio-stage-copy">
+            <span class="eyebrow light"><span class="eyebrow-line"></span> Selected work</span>
+            <p class="portfolio-index">03 — WORK REEL</p>
+            <h2>Things I<br /><em>made.</em></h2>
+            <div class="portfolio-video-preview" id="portfolio-video-preview"></div>
+          </div>
+          <div class="portfolio-work-reel" id="portfolio-work-reel"></div>
+        </div>
+        <div class="portfolio-stage portfolio-stage-proof" data-portfolio-stage="3">
+          <div class="portfolio-stage-copy">
+            <span class="eyebrow light"><span class="eyebrow-line"></span> Proof of practice</span>
+            <p class="portfolio-index">04 — ACHIEVEMENTS</p>
+            <h2>Keep making<br /><em>evidence.</em></h2>
+            <ul class="portfolio-achievement-list" id="portfolio-achievements"></ul>
+          </div>
+          <div class="portfolio-proof-orbit"><span>★</span><span>✦</span><span>✳</span></div>
+        </div>
+        <div class="portfolio-stage portfolio-stage-contact" data-portfolio-stage="4">
+          <div class="portfolio-stage-copy">
+            <span class="eyebrow light"><span class="eyebrow-line"></span> The next chapter</span>
+            <p class="portfolio-index">05 — LET’S BUILD</p>
+            <h2>Make something<br /><em>worth remembering.</em></h2>
+            <p id="portfolio-contact-copy">Available for thoughtful work, ambitious experiments, and teams with a point of view.</p>
+            <div class="portfolio-contact-links" id="portfolio-contact-links"></div>
+          </div>
+        </div>
+        <div class="portfolio-scroll-hint" id="portfolio-scroll-hint">Scroll or swipe to move through the story <span>↓</span></div>
+        <div class="portfolio-controls"><button type="button" id="portfolio-prev">← Back</button><div class="portfolio-dots" id="portfolio-dots"><button type="button" data-portfolio-jump="0"></button><button type="button" data-portfolio-jump="1"></button><button type="button" data-portfolio-jump="2"></button><button type="button" data-portfolio-jump="3"></button><button type="button" data-portfolio-jump="4"></button></div><button class="portfolio-next" type="button" id="portfolio-next">Next chapter <span>→</span></button></div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
