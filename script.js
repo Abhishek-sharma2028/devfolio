@@ -50,8 +50,6 @@ const loginModal = document.querySelector('#login');
 const loginForm = document.querySelector('#login-form');
 const loginStatus = document.querySelector('.login-status');
 const connectDemo = document.querySelector('#connect-demo');
-const googleSignIn = document.querySelector('#google-signin');
-const googleButtonContainer = document.querySelector('#google-button-container');
 const portfolioModal = document.querySelector('#portfolio-modal');
 const portfolioStages = document.querySelectorAll('[data-portfolio-stage]');
 const portfolioStageArt = document.querySelector('#portfolio-stage-art');
@@ -78,12 +76,8 @@ let portfolioStep = 0;
 let portfolioNavMode = 'button';
 let portfolioTouchStartY = null;
 let portfolioWheelLocked = false;
-let googleLoadPromise = null;
-let googleAuthPending = false;
-let googleAuthTimer = null;
 const PROFILE_STORAGE_KEY = 'devfolio-profiles-v1';
 const ACCOUNT_STORAGE_KEY = 'devfolio-account-v1';
-const GOOGLE_CLIENT_ID = document.body.dataset.googleClientId || '';
 
 const projectData = {
   'campus-connect': { label: 'CASE STUDY / 01', title: 'Campus Connect', rating: '4.9', likes: '312 appreciations', summary: 'A social map for finding your people on campus, designed around the first hello and built for the long haul.', role: 'Product design + full-stack', stack: 'React · Django · Mapbox', year: '2024', impact: '2.4k student sign-ups', story: 'Students were joining clubs, hackathons, and study groups across disconnected channels. Campus Connect turns that fragmented experience into a warm, searchable map where shared interests become an invitation.', highlights: ['Interest-based discovery and map experience', 'Realtime project calls and team matching', 'Accessible onboarding tested with 18 students'], image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=90', link: 'https://github.com/' },
@@ -532,7 +526,6 @@ function openLogin() {
   loginModal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open');
   loginModal.querySelector('input')?.focus();
-  loadGoogleIdentityServices();
 }
 function showToast(message) {
   let toast = document.querySelector('.app-toast');
@@ -567,92 +560,6 @@ function requireLogin(action = 'manage this portfolio') {
 }
 function refreshProfileActions() {
   document.querySelectorAll('.newly-added.person-card-link').forEach((card) => renderProfileActions(card));
-}
-function decodeGoogleCredential(credential) {
-    try {
-      const payload = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(decodeURIComponent(escape(atob(payload))));
-    } catch {
-      return null;
-    }
-}
-function finishGoogleSignIn(response) {
-    googleAuthPending = false;
-    clearTimeout(googleAuthTimer);
-    const profile = decodeGoogleCredential(response.credential);
-    if (!profile?.email) {
-      loginStatus.textContent = 'Google returned an invalid identity response.';
-      loginStatus.classList.remove('success');
-      return;
-    }
-    localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify({
-      provider: 'google',
-      email: profile.email,
-      name: profile.name || '',
-      picture: profile.picture || '',
-      signedInAt: new Date().toISOString()
-    }));
-    loginStatus.textContent = `Signed in with Google as ${profile.name || profile.email}.`;
-    loginStatus.classList.add('success');
-    document.querySelector('.login-link').textContent = 'Account';
-    refreshProfileActions();
-    showToast('Google account connected');
-    setTimeout(() => {
-      closeLogin();
-      builderModal.classList.add('open');
-      builderModal.setAttribute('aria-hidden', 'false');
-      document.body.classList.add('modal-open');
-      builderModal.querySelector('input')?.focus();
-    }, 700);
-}
-function loadGoogleIdentityServices() {
-    if (!GOOGLE_CLIENT_ID) {
-      loginStatus.textContent = 'Add your Google OAuth Web client ID to enable Google sign-in.';
-      loginStatus.classList.remove('success');
-      return;
-    }
-    const initializeGoogle = () => {
-      if (!window.google?.accounts?.id || !googleButtonContainer) {
-        loginStatus.textContent = 'Google sign-in is unavailable in this browser.';
-        return;
-      }
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: finishGoogleSignIn,
-        ux_mode: 'popup',
-        auto_select: false,
-        cancel_on_tap_outside: true
-      });
-      if (!googleButtonContainer.childElementCount) {
-        window.google.accounts.id.renderButton(googleButtonContainer, {
-          type: 'standard',
-          theme: 'outline',
-          size: 'large',
-          text: 'signin_with',
-          shape: 'rectangular',
-          width: Math.min(390, Math.max(240, googleButtonContainer.parentElement?.clientWidth || 320))
-        });
-      }
-    };
-    if (window.google?.accounts?.id) {
-      initializeGoogle();
-      return;
-    }
-    if (!googleLoadPromise) {
-      googleLoadPromise = new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.appendChild(script);
-      });
-    }
-    googleLoadPromise.then(initializeGoogle).catch(() => {
-      loginStatus.textContent = 'Google sign-in could not load. Disable a script blocker or check your connection.';
-      loginStatus.classList.remove('success');
-    });
 }
 function openProject(projectId) {
   const project = projectData[projectId];
@@ -756,8 +663,6 @@ connectDemo?.addEventListener('click', () => {
   builderModal.querySelector('input')?.focus();
   showToast('Local account connected');
 });
-googleSignIn?.addEventListener('click', loadGoogleIdentityServices);
-
 function openProfile(card) {
   profileModalTitle.textContent = card.dataset.profileName;
   profileModalPronouns.textContent = card.dataset.profilePronouns || '';

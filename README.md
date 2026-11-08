@@ -11,7 +11,6 @@ Devfolio is a cinematic portfolio builder for students and independent makers. I
 - Copy and delete controls for locally created portfolios; deleting removes the profile from the browser roster and local storage.
 - Theme-specific motion, chapter controls, scroll/swipe behavior, button treatments, and video-led presentation styles.
 - Local account sign-in for a static deployment without a backend.
-- Google Identity Services sign-in when a Google OAuth Web client ID is configured.
 
 ## Run locally
 
@@ -23,15 +22,4 @@ python -m http.server 4173
 
 The site does not send account or profile data to a server. Profiles and the local account are stored in the browser's `localStorage`.
 
-## Enable Google sign-in
-
-1. In Google Cloud Console, create an OAuth 2.0 **Web application** client.
-2. Add the deployed origin, such as `https://abhishek-sharma2028.github.io`, to **Authorized JavaScript origins**.
-3. If the OAuth consent screen is in testing mode, add every account that will sign in under **Test users**.
-4. Set the client ID in the page before publishing:
-
-```html
-<body data-google-client-id="YOUR_WEB_CLIENT_ID.apps.googleusercontent.com">
-```
-
-The client ID is public configuration; never put a client secret in this repository. Without a configured client ID, the button explains the missing setup instead of pretending that Google authentication succeeded.
+Google authentication is not included. Sign-in uses the local email/password account flow and stores the account in this browser.
