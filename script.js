@@ -422,6 +422,14 @@ function openPortfolio(card) {
   share.textContent = 'Copy recruiter link ↗';
   share.addEventListener('click', () => copyPortfolioLink(card));
   portfolioContactLinks.appendChild(share);
+  if (card.classList.contains('newly-added')) {
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.className = 'portfolio-delete-link';
+    deleteButton.textContent = 'Delete this portfolio';
+    deleteButton.addEventListener('click', () => deletePortfolio(card));
+    portfolioContactLinks.appendChild(deleteButton);
+  }
   portfolioModal.classList.add('open');
   portfolioModal.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open');
