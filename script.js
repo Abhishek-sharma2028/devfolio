@@ -73,6 +73,7 @@ const portfolioScrollHint = document.querySelector('#portfolio-scroll-hint');
 const themeSelect = builderForm?.querySelector('[name="theme"]');
 const themeSwatches = document.querySelectorAll('[data-theme-choice]');
 let activePortfolioCard = null;
+let editingPortfolioCard = null;
 let portfolioStep = 0;
 let portfolioNavMode = 'button';
 let portfolioTouchStartY = null;
@@ -247,16 +248,30 @@ function createSharedProfileCard(profile) {
 function addProfileCardActions(card) {
   card.tabIndex = 0;
   card.setAttribute('role', 'button');
-  card.addEventListener('click', () => openPortfolio(card));
-  card.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openPortfolio(card);
-    }
-  });
-  if (!card.classList.contains('newly-added')) return;
+  if (!card.dataset.actionsBound) {
+    card.addEventListener('click', () => openPortfolio(card));
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPortfolio(card);
+      }
+    });
+    card.dataset.actionsBound = 'true';
+  }
+  renderProfileActions(card);
+}
+function renderProfileActions(card) {
+  card.querySelector('.profile-card-actions')?.remove();
+  if (!card.classList.contains('newly-added') || !isPortfolioOwner(card)) return;
   const actions = document.createElement('div');
   actions.className = 'profile-card-actions';
+  const editButton = document.createElement('button');
+  editButton.type = 'button';
+  editButton.textContent = 'Edit';
+  editButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    openEditor(card);
+  });
   const linkButton = document.createElement('button');
   linkButton.type = 'button';
   linkButton.textContent = 'Copy recruiter link';
@@ -272,8 +287,28 @@ function addProfileCardActions(card) {
     event.stopPropagation();
     deletePortfolio(card);
   });
-  actions.append(linkButton, deleteButton);
+  actions.append(editButton, linkButton, deleteButton);
   card.appendChild(actions);
+}
+function openEditor(card) {
+  if (!requireLogin('edit your portfolio')) return;
+  editingPortfolioCard = card;
+  const fieldMap = {
+    name: 'profileName', role: 'profileRole', bio: 'profileBio', pronouns: 'profilePronouns',
+    availability: 'profileAvailability', about: 'profileAbout', photo: 'profilePhoto',
+    resume: 'profileResume', email: 'profileEmail', website: 'profileWebsite',
+    skills: 'profileSkills', skillLevel: 'profileSkillLevel', rating: 'profileRating',
+    projectCount: 'profileProjects', years: 'profileYears', achievements: 'profileAchievements',
+    experience: 'profileExperience', video: 'profileVideo', projectVideo: 'profileProjectVideo',
+    socials: 'profileSocials', theme: 'profileTheme', motion: 'profileMotion'
+  };
+  builderForm?.querySelectorAll('[name]').forEach((field) => {
+    const datasetKey = fieldMap[field.name];
+    if (datasetKey) field.value = card.dataset[datasetKey] || '';
+  });
+  builderModal.classList.add('open');
+  builderModal.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
 }
 function saveProfiles() {
   const seen = new Set();
@@ -286,6 +321,11 @@ function saveProfiles() {
   localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profiles));
 }
 function deletePortfolio(card) {
+  if (!requireLogin('delete your portfolio')) return;
+  if (!isPortfolioOwner(card)) {
+    showToast('Only the portfolio owner can delete it');
+    return;
+  }
   const name = card.dataset.profileName || 'this';
   if (!window.confirm(`Delete ${name}'s portfolio from this browser?`)) return;
   if (activePortfolioCard === card) closePortfolio();
@@ -422,7 +462,7 @@ function openPortfolio(card) {
   share.textContent = 'Copy recruiter link ↗';
   share.addEventListener('click', () => copyPortfolioLink(card));
   portfolioContactLinks.appendChild(share);
-  if (card.classList.contains('newly-added')) {
+  if (card.classList.contains('newly-added') && isPortfolioOwner(card)) {
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.className = 'portfolio-delete-link';
@@ -503,6 +543,28 @@ function showToast(message) {
   clearTimeout(showToast.timeout);
   showToast.timeout = setTimeout(() => toast.classList.remove('show'), 2200);
 }
+function currentAccount() {
+  try {
+    const account = JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY) || 'null');
+    return account?.email ? account : null;
+  } catch {
+    localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+    return null;
+  }
+}
+function isPortfolioOwner(card) {
+  const account = currentAccount();
+  return Boolean(account?.email && card?.dataset.profileOwnerEmail && account.email.toLowerCase() === card.dataset.profileOwnerEmail.toLowerCase());
+}
+function requireLogin(action = 'manage this portfolio') {
+  if (currentAccount()) return true;
+  showToast(`Sign in to ${action}`);
+  openLogin();
+  return false;
+}
+function refreshProfileActions() {
+  document.querySelectorAll('.newly-added.person-card-link').forEach((card) => renderProfileActions(card));
+}
 function decodeGoogleCredential(credential) {
     try {
       const payload = credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -528,6 +590,7 @@ function finishGoogleSignIn(response) {
     loginStatus.textContent = `Signed in with Google as ${profile.name || profile.email}.`;
     loginStatus.classList.add('success');
     document.querySelector('.login-link').textContent = 'Account';
+    refreshProfileActions();
     showToast('Google account connected');
     setTimeout(() => {
       closeLogin();
@@ -666,6 +729,7 @@ loginForm?.addEventListener('submit', (event) => {
   loginStatus.textContent = `Signed in as ${email}. Your portfolio workspace is ready.`;
   loginStatus.classList.add('success');
   document.querySelector('.login-link').textContent = 'Account';
+  refreshProfileActions();
   setTimeout(closeLogin, 700);
   showToast('Welcome back to Devfolio');
 });
@@ -674,6 +738,7 @@ connectDemo?.addEventListener('click', () => {
   localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify({ email, signedInAt: new Date().toISOString() }));
   loginStatus.textContent = 'Local account connected. Opening your portfolio builder…';
   loginStatus.classList.add('success');
+  refreshProfileActions();
   closeLogin();
   builderModal.classList.add('open');
   builderModal.setAttribute('aria-hidden', 'false');
@@ -759,6 +824,8 @@ document.querySelectorAll('[data-close-profile]').forEach((trigger) => trigger.a
 document.querySelectorAll('.open-builder').forEach((trigger) => {
   trigger.addEventListener('click', (event) => {
     event.preventDefault();
+    if (!requireLogin('create a portfolio')) return;
+    editingPortfolioCard = null;
     builderModal.classList.add('open');
     builderModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
@@ -783,9 +850,8 @@ builderForm?.addEventListener('submit', (event) => {
   const photo = String(data.get('photo')).trim();
   const skills = String(data.get('skills')).split(',').map((skill) => skill.trim()).filter(Boolean).slice(0, 8);
   const initials = name.split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
-  const card = document.createElement('article');
-  card.className = 'person-card newly-added';
-  card.classList.add('person-card-link');
+  const card = editingPortfolioCard || document.createElement('article');
+  card.className = 'person-card newly-added person-card-link';
   card.tabIndex = 0;
   card.setAttribute('role', 'button');
   card.dataset.profileName = name;
@@ -809,13 +875,15 @@ builderForm?.addEventListener('submit', (event) => {
   card.dataset.profileSocials = String(data.get('socials') || '');
   card.dataset.profileTheme = String(data.get('theme') || 'aurora');
   card.dataset.profileMotion = String(data.get('motion') || 'cinematic');
+  card.dataset.profileOwnerEmail = editingPortfolioCard?.dataset.profileOwnerEmail || currentAccount()?.email || '';
   const photoStyle = photo ? `style="background-image:linear-gradient(#0002,#0004),url('${photo.replace(/'/g, '%27')}')"` : '';
   const safeRole = role.replace(/[<>]/g, '');
   card.innerHTML = `<div class="person-card-photo" ${photoStyle}>${photo ? '' : initials}</div><div class="person-card-info"><span>${safeRole.toUpperCase()}</span><h3>${name.replace(/[<>]/g, '')}</h3><p>${bio.replace(/[<>]/g, '')}</p><div>${skills.map((skill) => `<b>${skill.replace(/[<>]/g, '')}</b>`).join('')}</div><small class="view-profile">Open profile ↗</small></div>`;
-  peopleRoster?.insertBefore(card, peopleRoster.querySelector('.add-person-card'));
+  if (!editingPortfolioCard) peopleRoster?.insertBefore(card, peopleRoster.querySelector('.add-person-card'));
   document.body.dataset.portfolioTheme = String(data.get('theme') || 'aurora');
   document.body.dataset.portfolioMotion = String(data.get('motion') || 'cinematic');
   addProfileCardActions(card);
+  editingPortfolioCard = null;
   saveProfiles();
   builderForm.reset();
   const status = builderModal.querySelector('.builder-status');
