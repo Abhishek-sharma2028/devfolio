@@ -296,7 +296,10 @@ function openEditor(card) {
     resume: 'profileResume', email: 'profileEmail', website: 'profileWebsite',
     skills: 'profileSkills', skillLevel: 'profileSkillLevel', rating: 'profileRating',
     projectCount: 'profileProjects', years: 'profileYears', achievements: 'profileAchievements',
-    experience: 'profileExperience', video: 'profileVideo', projectVideo: 'profileProjectVideo',
+    college: 'profileCollege', school: 'profileSchool', timeline: 'profileTimeline',
+    experience: 'profileExperience', projectName: 'profileProjectName',
+    projectDescription: 'profileProjectDescription', projectGithub: 'profileProjectGithub',
+    video: 'profileVideo', projectVideo: 'profileProjectVideo',
     socials: 'profileSocials', theme: 'profileTheme', motion: 'profileMotion'
   };
   builderForm?.querySelectorAll('[name]').forEach((field) => {
@@ -435,16 +438,22 @@ function openPortfolio(card) {
   portfolioLocation.textContent = data.profileAvailability || 'Available for work';
   portfolioStageArt.style.backgroundImage = getComputedStyle(card.querySelector('.person-card-photo')).backgroundImage;
   renderVideoPreview(data);
-  const experience = (data.profileExperience || 'Started building in public — today').split('\n').map((item) => item.trim()).filter(Boolean);
+  const experience = [
+    ...(data.profileCollege ? [`College · ${data.profileCollege}`] : []),
+    ...(data.profileSchool ? [`School · ${data.profileSchool}`] : []),
+    ...(data.profileTimeline || '').split('\n'),
+    ...(data.profileExperience || '').split('\n')
+  ].map((item) => item.trim()).filter(Boolean);
+  if (!experience.length) experience.push('Started building in public — today');
   portfolioTimeline.innerHTML = experience.map((item, index) => `<div class="journey-item"><span>0${index + 1}</span><div><strong>${item}</strong><p>${index === 0 ? 'The first spark became a direction.' : 'A new chapter, a sharper point of view.'}</p></div></div>`).join('');
   const workKeys = ['pulse', 'campus-connect', 'open-notes'];
-  portfolioWorkReel.innerHTML = workKeys.map((key, index) => {
+  portfolioWorkReel.innerHTML = (data.profileProjectName ? [`<article class="portfolio-work-card portfolio-custom-work-card"><span>01</span><div><small>FEATURED PROJECT</small><h3>${escapeHtml(data.profileProjectName)}</h3><p>${escapeHtml(data.profileProjectDescription || 'A project built with intention.')}</p>${data.profileProjectGithub ? `<a href="${safeUrl(data.profileProjectGithub)}" target="_blank" rel="noreferrer">Open GitHub ↗</a>` : ''}</div></article>`] : []).concat(workKeys.map((key, index) => {
     const project = projectData[key];
     return `<article class="portfolio-work-card" style="--work-image:url('${project.image}')"><span>0${index + 1}</span><div><small>${project.role}</small><h3>${project.title}</h3><button type="button" data-portfolio-project="${key}">View work ↗</button></div></article>`;
-  }).join('');
+  })).join('');
   portfolioAchievements.innerHTML = (data.profileAchievements || 'Building in public and learning every week.').split('\n').map((item) => item.trim()).filter(Boolean).map((item) => `<li>${item}</li>`).join('');
   portfolioContactLinks.innerHTML = '';
-  [['Email', data.profileEmail ? `mailto:${data.profileEmail}` : ''], ['Website', data.profileWebsite], ['Resume', data.profileResume], ['Watch intro', data.profileVideo]].forEach(([label, href]) => {
+  [['Email', data.profileEmail ? `mailto:${data.profileEmail}` : ''], ['Website', data.profileWebsite], ['Resume', data.profileResume], ['GitHub project', data.profileProjectGithub], ['Watch intro', data.profileVideo]].forEach(([label, href]) => {
     if (!href) return;
     const link = document.createElement('a');
     link.href = href;
@@ -466,6 +475,17 @@ function openPortfolio(card) {
     deleteButton.textContent = 'Delete this portfolio';
     deleteButton.addEventListener('click', () => deletePortfolio(card));
     portfolioContactLinks.appendChild(deleteButton);
+  }
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+  }
+  function safeUrl(value) {
+    try {
+      const url = new URL(value);
+      return ['http:', 'https:'].includes(url.protocol) ? url.href : '#';
+    } catch {
+      return '#';
+    }
   }
   portfolioModal.classList.add('open');
   portfolioModal.setAttribute('aria-hidden', 'false');
@@ -782,6 +802,12 @@ builderForm?.addEventListener('submit', (event) => {
   card.dataset.profileSkillLevel = String(data.get('skillLevel') || '');
   card.dataset.profileYears = String(data.get('years') || '');
   card.dataset.profileExperience = String(data.get('experience') || '');
+  card.dataset.profileCollege = String(data.get('college') || '');
+  card.dataset.profileSchool = String(data.get('school') || '');
+  card.dataset.profileTimeline = String(data.get('timeline') || '');
+  card.dataset.profileProjectName = String(data.get('projectName') || '');
+  card.dataset.profileProjectDescription = String(data.get('projectDescription') || '');
+  card.dataset.profileProjectGithub = String(data.get('projectGithub') || '');
   card.dataset.profileVideo = String(data.get('video') || '');
   card.dataset.profileProjectVideo = String(data.get('projectVideo') || '');
   card.dataset.profileEmail = String(data.get('email') || '');

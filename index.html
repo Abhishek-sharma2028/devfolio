@@ -249,7 +249,18 @@
             <label>Years building<input name="years" type="number" min="0" placeholder="4" /></label>
           </div>
           <label>Achievements <span class="optional">(one per line)</span><textarea name="achievements" rows="3" placeholder="Winner — Smart India Hackathon 2024&#10;Published a React accessibility guide&#10;Speaker — Design &amp; Code Meetup"></textarea></label>
+          <div class="builder-form-grid">
+            <label>College / university<input name="college" placeholder="e.g. Delhi Technological University" /></label>
+            <label>School<input name="school" placeholder="e.g. Delhi Public School" /></label>
+          </div>
+          <label>Journey timeline <span class="optional">(one milestone per line)</span><textarea name="timeline" rows="3" placeholder="2022 — Started computer science&#10;2024 — Built my first product&#10;2025 — Joined a product team"></textarea></label>
           <label>Education &amp; experience <span class="optional">(one per line)</span><textarea name="experience" rows="3" placeholder="B.Tech Computer Science — 2022–2026&#10;Product intern at Studio North — 2025"></textarea></label>
+          <div class="builder-section-label">Featured project</div>
+          <div class="builder-form-grid">
+            <label>Project name<input name="projectName" placeholder="e.g. Campus Connect" /></label>
+            <label>GitHub link<input name="projectGithub" type="url" placeholder="https://github.com/you/project" /></label>
+          </div>
+          <label>Project description<textarea name="projectDescription" rows="3" placeholder="What did you build, what problem does it solve, and what did you learn?"></textarea></label>
           <div class="builder-section-label">Showreel</div>
           <div class="builder-form-grid">
             <label>Intro video URL <span class="optional">(YouTube/Vimeo)</span><input name="video" type="url" placeholder="https://youtube.com/watch?v=..." /></label>
@@ -381,6 +392,6 @@
         <div class="portfolio-controls"><button type="button" id="portfolio-prev">← Back</button><div class="portfolio-dots" id="portfolio-dots"><button type="button" data-portfolio-jump="0"></button><button type="button" data-portfolio-jump="1"></button><button type="button" data-portfolio-jump="2"></button><button type="button" data-portfolio-jump="3"></button><button type="button" data-portfolio-jump="4"></button></div><button class="portfolio-next" type="button" id="portfolio-next">Next chapter <span>→</span></button></div>
       </div>
     </div>
-    <script src="script.js?v=9"></script>
+    <script src="script.js?v=10"></script>
   </body>
 </html>
