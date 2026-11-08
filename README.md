@@ -27,7 +27,8 @@ The site does not send account or profile data to a server. Profiles and the loc
 
 1. In Google Cloud Console, create an OAuth 2.0 **Web application** client.
 2. Add the deployed origin, such as `https://abhishek-sharma2028.github.io`, to **Authorized JavaScript origins**.
-3. Set the client ID in the page before publishing:
+3. If the OAuth consent screen is in testing mode, add every account that will sign in under **Test users**.
+4. Set the client ID in the page before publishing:
 
 ```html
 <body data-google-client-id="YOUR_WEB_CLIENT_ID.apps.googleusercontent.com">
