@@ -200,6 +200,7 @@ function applyPortfolioStyle(card) {
   document.body.dataset.portfolioTheme = theme;
   document.body.dataset.portfolioMotion = motion;
   portfolioModal.dataset.navigation = portfolioNavMode;
+  portfolioModal.dataset.theme = theme;
   if (themeSelect) themeSelect.value = theme;
   themeSwatches.forEach((swatch) => swatch.classList.toggle('active', swatch.dataset.themeChoice === theme));
 }
@@ -239,13 +240,58 @@ function createSharedProfileCard(profile) {
   const info = document.createElement('div');
   info.className = 'person-card-info';
   const skills = String(profile.profileSkills || '').split(',').map((item) => item.trim()).filter(Boolean).slice(0, 3);
-  info.innerHTML = `<span>${String(profile.profileRole || 'CREATIVE BUILDER').toUpperCase().replace(/[<>]/g, '')}</span><h3>${String(profile.profileName || 'Your portfolio').replace(/[<>]/g, '')}</h3><p>${String(profile.profileBio || '').replace(/[<>]/g, '')}</p><div>${skills.map((skill) => `<b>${skill.replace(/[<>]/g, '')}</b>`).join('')}</div><small class="view-profile">Open profile ↗</small>`;
+  info.innerHTML = `<span>${String(profile.profileRole || 'CREATIVE BUILDER').toUpperCase().replace(/[<>]/g, '')}</span><h3>${String(profile.profileName || 'Your portfolio').replace(/[<>]/g, '')}</h3><p>${String(profile.profileBio || '').replace(/[<>]/g, '')}</p><div>${skills.map((skill) => `<b>${skill.replace(/[<>]/g, '')}</b>`).join('')}</div><small class="view-profile">Open portfolio ↗</small>`;
   card.appendChild(info);
   return card;
 }
+function addProfileCardActions(card) {
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
+  card.addEventListener('click', () => openPortfolio(card));
+  card.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      openPortfolio(card);
+    }
+  });
+  if (!card.classList.contains('newly-added')) return;
+  const actions = document.createElement('div');
+  actions.className = 'profile-card-actions';
+  const linkButton = document.createElement('button');
+  linkButton.type = 'button';
+  linkButton.textContent = 'Copy recruiter link';
+  linkButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    copyPortfolioLink(card);
+  });
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.className = 'profile-delete-button';
+  deleteButton.textContent = 'Delete';
+  deleteButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    deletePortfolio(card);
+  });
+  actions.append(linkButton, deleteButton);
+  card.appendChild(actions);
+}
 function saveProfiles() {
-  const profiles = [...document.querySelectorAll('.newly-added.person-card-link')].map(serializeProfile);
+  const seen = new Set();
+  const profiles = [...document.querySelectorAll('.newly-added.person-card-link')].map(serializeProfile).filter((profile) => {
+    const key = `${profile.profileName}|${profile.profileEmail}|${profile.profileRole}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profiles));
+}
+function deletePortfolio(card) {
+  const name = card.dataset.profileName || 'this';
+  if (!window.confirm(`Delete ${name}'s portfolio from this browser?`)) return;
+  if (activePortfolioCard === card) closePortfolio();
+  card.remove();
+  saveProfiles();
+  showToast(`${name} portfolio deleted`);
 }
 function restoreProfiles() {
   let profiles = [];
@@ -254,18 +300,26 @@ function restoreProfiles() {
   } catch {
     profiles = [];
   }
+  const seen = new Set();
   profiles.filter((profile) => profile?.profileName).forEach((profile) => {
+    const key = `${profile.profileName}|${profile.profileEmail}|${profile.profileRole}`;
+    if (seen.has(key)) return;
+    seen.add(key);
     const card = createSharedProfileCard(profile);
     card.classList.add('newly-added');
     peopleRoster?.insertBefore(card, peopleRoster.querySelector('.add-person-card'));
-    card.addEventListener('click', () => openPortfolio(card));
-    card.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        openPortfolio(card);
-      }
-    });
+    addProfileCardActions(card);
   });
+  if (profiles.length) saveProfiles();
+}
+async function copyPortfolioLink(card) {
+  const url = publicPortfolioUrl(card);
+  try {
+    await navigator.clipboard.writeText(url);
+    showToast('Recruiter link copied');
+  } catch {
+    window.prompt('Copy this recruiter portfolio link', url);
+  }
 }
 function publicPortfolioUrl(card) {
   return `${window.location.origin}${window.location.pathname}#portfolio=${encodePortfolio(serializeProfile(card))}`;
@@ -316,7 +370,17 @@ function setPortfolioStep(step) {
   portfolioStepProgress.style.width = `${((portfolioStep + 1) / 5) * 100}%`;
   portfolioDots?.querySelectorAll('button').forEach((dot, index) => dot.classList.toggle('active', index === portfolioStep));
   portfolioPrev.disabled = portfolioStep === 0;
-  portfolioNext.innerHTML = portfolioStep === 4 ? 'Close film <span>×</span>' : 'Next chapter <span>→</span>';
+  const nextLabels = {
+    aurora: 'Reveal next <span>→</span>',
+    midnight: 'Enter next <span>↗</span>',
+    monochrome: 'Continue <span>+</span>',
+    editorial: 'Scroll onward <span>↓</span>',
+    sherbet: 'Keep going <span>✦</span>',
+    cyber: 'Launch next <span>↗</span>',
+    clay: 'Turn the page <span>→</span>',
+    paper: 'Read on <span>↓</span>'
+  };
+  portfolioNext.innerHTML = portfolioStep === 4 ? 'Close portfolio <span>×</span>' : (nextLabels[portfolioModal.dataset.theme] || 'Next chapter <span>→</span>');
   portfolioNext.hidden = portfolioNavMode === 'scroll';
   portfolioPrev.hidden = portfolioNavMode === 'scroll';
   portfolioDots.hidden = portfolioNavMode === 'scroll';
@@ -355,16 +419,8 @@ function openPortfolio(card) {
   const share = document.createElement('button');
   share.type = 'button';
   share.className = 'portfolio-share-link';
-  share.textContent = 'Copy public link ↗';
-  share.addEventListener('click', async () => {
-    const url = publicPortfolioUrl(card);
-    try {
-      await navigator.clipboard.writeText(url);
-      showToast('Public portfolio link copied');
-    } catch {
-      window.prompt('Copy your public portfolio link', url);
-    }
-  });
+  share.textContent = 'Copy recruiter link ↗';
+  share.addEventListener('click', () => copyPortfolioLink(card));
   portfolioContactLinks.appendChild(share);
   portfolioModal.classList.add('open');
   portfolioModal.setAttribute('aria-hidden', 'false');
@@ -688,13 +744,7 @@ function openProfile(card) {
 }
 
 document.querySelectorAll('.person-card-link').forEach((card) => {
-  card.addEventListener('click', () => openPortfolio(card));
-  card.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      openPortfolio(card);
-    }
-  });
+  addProfileCardActions(card);
 });
 document.querySelectorAll('[data-close-profile]').forEach((trigger) => trigger.addEventListener('click', closeProfile));
 
@@ -757,20 +807,15 @@ builderForm?.addEventListener('submit', (event) => {
   peopleRoster?.insertBefore(card, peopleRoster.querySelector('.add-person-card'));
   document.body.dataset.portfolioTheme = String(data.get('theme') || 'aurora');
   document.body.dataset.portfolioMotion = String(data.get('motion') || 'cinematic');
-  card.addEventListener('click', () => openPortfolio(card));
-  card.addEventListener('keydown', (keyboardEvent) => {
-    if (keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') {
-      keyboardEvent.preventDefault();
-      openPortfolio(card);
-    }
-  });
+  addProfileCardActions(card);
   saveProfiles();
   builderForm.reset();
   const status = builderModal.querySelector('.builder-status');
-  if (status) status.textContent = `${name} is now on Devfolio.`;
+  if (status) status.textContent = `${name} is ready. Your recruiter link is available in the portfolio film.`;
   setTimeout(() => {
     closeBuilder();
     card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    openPortfolio(card);
   }, 650);
 });
 
@@ -790,14 +835,15 @@ themeSwatches.forEach((swatch) => {
     themeSwatches.forEach((item) => item.classList.toggle('active', item === swatch));
   });
 
-  restoreProfiles();
-  try {
-    const account = JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY) || 'null');
-    if (account?.email) document.querySelector('.login-link').textContent = 'Account';
-  } catch {
-    localStorage.removeItem(ACCOUNT_STORAGE_KEY);
-  }
 });
+
+restoreProfiles();
+try {
+  const account = JSON.parse(localStorage.getItem(ACCOUNT_STORAGE_KEY) || 'null');
+  if (account?.email) document.querySelector('.login-link').textContent = 'Account';
+} catch {
+  localStorage.removeItem(ACCOUNT_STORAGE_KEY);
+}
 
 const sharedPortfolio = new URLSearchParams(window.location.hash.slice(1)).get('portfolio');
 if (sharedPortfolio) {
