@@ -78,6 +78,9 @@ let portfolioStep = 0;
 let portfolioNavMode = 'button';
 let portfolioTouchStartY = null;
 let portfolioWheelLocked = false;
+let googleLoadPromise = null;
+let googleAuthPending = false;
+let googleAuthTimer = null;
 const PROFILE_STORAGE_KEY = 'devfolio-profiles-v1';
 const ACCOUNT_STORAGE_KEY = 'devfolio-account-v1';
 const GOOGLE_CLIENT_ID = document.body.dataset.googleClientId || '';
@@ -574,6 +577,8 @@ function decodeGoogleCredential(credential) {
     }
 }
 function finishGoogleSignIn(response) {
+    googleAuthPending = false;
+    clearTimeout(googleAuthTimer);
     const profile = decodeGoogleCredential(response.credential);
     if (!profile?.email) {
       loginStatus.textContent = 'Google returned an invalid identity response.';
@@ -633,16 +638,21 @@ function loadGoogleIdentityServices() {
       initializeGoogle();
       return;
     }
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = initializeGoogle;
-    script.onerror = () => {
-      loginStatus.textContent = 'Google sign-in could not load. Check your connection and try again.';
+    if (!googleLoadPromise) {
+      googleLoadPromise = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+    googleLoadPromise.then(initializeGoogle).catch(() => {
+      loginStatus.textContent = 'Google sign-in could not load. Disable a script blocker or check your connection.';
       loginStatus.classList.remove('success');
-    };
-    document.head.appendChild(script);
+    });
 }
 function openProject(projectId) {
   const project = projectData[projectId];
