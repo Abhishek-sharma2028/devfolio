@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/~oauth/initiate",
+      "destination": "https://oauth.lovable.app/initiate?project_id=7ab31640-18db-4418-bf6a-8be660233dd1&project_env=dev"
+    }
+  ]
+}
