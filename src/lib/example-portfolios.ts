@@ -4,7 +4,8 @@ import { emptyProject, parseProfile, type PortfolioProject, type PortfolioTheme 
 
 const campus = "https://example.invalid/campus.jpg";
 const finance = "https://example.invalid/finance.jpg";
-export const exampleImageSources = { [campus]: campusImage, [finance]: financeImage };
+const portraits = Object.fromEntries(["alex", "arjun", "sana", "noor", "dev", "mira", "kabir"].map((name) => [`https://example.invalid/portrait-${name}.jpg`, `/devfolio/portraits/${name}.jpg`]));
+export const exampleImageSources = { [campus]: campusImage, [finance]: financeImage, ...portraits };
 
 function project(data: Partial<PortfolioProject>): PortfolioProject {
   return { ...emptyProject(), ...data };
@@ -12,6 +13,17 @@ function project(data: Partial<PortfolioProject>): PortfolioProject {
 
 // All people, institutions, clients and outcomes in these examples are fictional.
 export const examplePortfolios = [
+  {
+    slug: "alex-rivera", name: "Alex Rivera", role: "Full-stack developer", location: "Austin, USA", theme: "montage" as PortfolioTheme,
+    bio: "I turn complex product ideas into fast, accessible interfaces and reliable systems. My work spans the browser, APIs and the testing that keeps releases dependable.",
+    skills: ["TypeScript", "React", "Node.js", "PostgreSQL", "Testing", "Accessibility"],
+    profile: { ...parseProfile(null), headline: "Interfaces with personality. Systems with a plan.", availability: "Open to thoughtful projects", email: "alex@example.com", experience: "2025–2026 · Product developer, Field Notes Studio (fictional)\nBuilt web interfaces and service APIs for small product teams.", education: "Computer science and independent design practice (fictional)", achievements: "Developed an accessible component library and release checklist (fictional)", interests: "Type specimens, street photography and building small tools." },
+    projects: [
+      project({ name: "Signal", category: "Product platform", year: "2026", technologies: "React · TypeScript · PostgreSQL", contribution: "Interface architecture and full-stack implementation.", description: "Signal is a fictional product dashboard that helps a small team understand customer events without losing the context behind them.", challenge: "Reports lived in disconnected tools and teams could not trace changes back to product decisions.", solution: "Built a focused event model, accessible dashboard and a source-linked activity history.", results: "The concept demonstrates a clearer path from event to decision without claiming real customer outcomes." }),
+      project({ name: "Gulf Port", category: "Operations system", year: "2025", technologies: "Node.js · PostgreSQL · React", contribution: "Backend services, interface flows and automated tests.", description: "Gulf Port is a fictional logistics workspace with simple handoffs and a clear view of work in progress.", challenge: "Operators had to reconcile changing statuses across messages and spreadsheets.", solution: "Designed a shared status model, role-aware actions and visible event history.", results: "The sample workflow keeps each handoff traceable and easy to review." }),
+      project({ name: "Patch Kit", category: "Developer tool", year: "2025", technologies: "TypeScript · Vite · Vitest", contribution: "Tool design, implementation and documentation.", description: "Patch Kit is a fictional toolkit for shipping small interface changes with consistent checks and useful documentation.", challenge: "Tiny releases repeatedly missed visual and keyboard checks.", solution: "Combined reusable checklists with focused component examples and automated tests.", results: "The demo shows how a repeatable release flow can reduce overlooked details." }),
+    ],
+  },
   {
     slug: "arjun-sharma", name: "Arjun Sharma", role: "Full-stack developer", location: "New Delhi, India", theme: "terminal" as PortfolioTheme,
     bio: "I build accessible web products that make everyday student life less complicated. My work brings together practical engineering, user research and thoughtful interaction design. I enjoy working across the stack, from modelling data to polishing the smallest loading state.",
@@ -79,5 +91,8 @@ export const examplePortfolios = [
 ];
 
 export function getExamplePortfolio(slug: string) {
-  return examplePortfolios.find((portfolio) => portfolio.slug === slug);
+  const portfolio = examplePortfolios.find((item) => item.slug === slug);
+  if (!portfolio) return undefined;
+  const portraitName = slug.split("-")[0];
+  return { ...portfolio, profile: { ...portfolio.profile, portrait: `https://example.invalid/portrait-${portraitName}.jpg` } };
 }

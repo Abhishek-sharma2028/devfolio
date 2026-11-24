@@ -47,7 +47,8 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
   }, [p]);
   return <div ref={root} data-portfolio-theme={theme} className="portfolio-view min-h-full bg-background text-foreground">
     <main className="mx-auto max-w-6xl px-6 py-12 sm:px-10 sm:py-20">
-      <header className="portfolio-intro grid items-start gap-8 border-b border-border pb-12 sm:grid-cols-[1fr_auto]">
+      {theme === "montage" && <nav className="montage-nav" aria-label="Portfolio sections"><a href="#montage-top">{p.name || "Portfolio"}</a><div><a href="#montage-stack">Stack</a><a href="#montage-work">Work</a><a href="#montage-about">About</a></div><a className="montage-contact" href={profile.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email) ? `mailto:${profile.email}` : "#montage-about"}>Say hello <ArrowUpRight className="size-4" /></a></nav>}
+      <header id="montage-top" className="portfolio-intro grid items-start gap-8 border-b border-border pb-12 sm:grid-cols-[1fr_auto]">
         <div className="min-w-0">
           <div className="mb-6 flex flex-wrap items-center gap-3"><span className="font-mono text-xs text-muted-foreground">{p.location || "Independent creator"}</span>{profile.availability && <span className="border border-border px-3 py-1 text-xs"><span className="availability-dot" />{profile.availability}</span>}</div>
           <h1 className="portfolio-name break-words text-4xl font-semibold sm:text-6xl">{p.name || "Your name"}<span className="text-highlight">.</span></h1>
@@ -60,9 +61,10 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
             {[["GitHub", profile.github, Github], ["LinkedIn", profile.linkedin, Linkedin], ["Website", profile.website, ArrowUpRight], ["Résumé", profile.resume, ArrowUpRight]].map(([label, url, Icon]) => { const href = safeUrl(String(url)); const Symbol = Icon as typeof Github; return href ? <Button asChild variant="ghost" key={String(label)}><a href={href} target="_blank" rel="noopener noreferrer"><Symbol className="size-4" />{String(label)}</a></Button> : null; })}
           </div>
         </div>
-        {safeUrl(profile.portrait) ? <PortfolioImage src={profile.portrait} alt={`${p.name || "Portfolio owner"} profile portrait`} className="aspect-square w-36 rounded-md object-cover sm:w-48" fallback={<ProfileArtwork name={p.name} />} /> : <ProfileArtwork name={p.name} />}
+        {safeUrl(profile.portrait) ? <PortfolioImage src={imageSources[profile.portrait] ?? profile.portrait} alt={imageSources[profile.portrait] ? `Illustrative portrait for ${p.name || "example portfolio"}` : `${p.name || "Portfolio owner"} profile portrait`} className="aspect-[4/5] w-full max-w-sm justify-self-center rounded-md object-cover sm:w-72 sm:justify-self-end lg:w-80" fallback={<ProfileArtwork name={p.name} />} /> : <ProfileArtwork name={p.name} />}
       </header>
-      <section className="py-12">
+      {theme === "montage" && <section id="montage-stack" className="montage-manifesto"><span>// What I work with</span><strong>I BUILD <mark>FRONT.</mark><br />I BUILD <mark>BACK.</mark></strong><p>{p.skills.join("  /  ")}</p></section>}
+      <section id="montage-work" className="py-12">
         <div className="mb-8 flex items-baseline justify-between"><h2 className="portfolio-heading text-3xl font-semibold">Selected work</h2><span className="font-mono text-sm text-muted-foreground">{String(projects.length).padStart(2, "0")} projects</span></div>
         <div className="portfolio-project-grid grid gap-6 sm:grid-cols-2">
           {projects.map((project, i) => <article key={i} className="portfolio-reveal portfolio-project group overflow-hidden rounded-md border border-border bg-card">
@@ -76,7 +78,7 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
           </article>)}
         </div>
       </section>
-      <div className="grid gap-10 border-t border-border py-10 sm:grid-cols-2">{[["Experience", profile.experience], ["Education", profile.education], ["Achievements", profile.achievements], ["Outside of work", profile.interests]].map(([label, text]) => text && <section className="portfolio-reveal" key={label}><h2 className="portfolio-heading mb-4 text-2xl font-semibold">{label}</h2><p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">{text}</p></section>)}</div>
+      <div id="montage-about" className="grid gap-10 border-t border-border py-10 sm:grid-cols-2">{[["Experience", profile.experience], ["Education", profile.education], ["Achievements", profile.achievements], ["Outside of work", profile.interests]].map(([label, text]) => text && <section className="portfolio-reveal" key={label}><h2 className="portfolio-heading mb-4 text-2xl font-semibold">{label}</h2><p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">{text}</p></section>)}</div>
       <footer className="border-t border-border pt-6 font-mono text-xs text-muted-foreground">{p.name || "Portfolio"} · Made with Devfolio<br />Website creators: Abhishek Sharma and Alok kumar singh</footer>
     </main>
     <Dialog open={!!selected} onOpenChange={(open) => { if (!open) setSelected(null); }}><DialogContent data-portfolio-theme={theme} className="portfolio-view max-h-[90dvh] max-w-3xl overflow-y-auto bg-background text-foreground">{selected && <CaseStudy project={selected} imageSources={imageSources} />}</DialogContent></Dialog>
@@ -89,5 +91,5 @@ function ProjectArtwork({ project, index }: { project: PortfolioProject; index: 
 
 function ProfileArtwork({ name }: { name: string }) {
   const initials = name.trim().split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join("").toUpperCase() || "?";
-  return <div className="grid aspect-square w-36 place-items-center rounded-md bg-secondary font-serif text-4xl sm:w-48" aria-label="Profile image unavailable">{initials}</div>;
+  return <div className="grid aspect-[4/5] w-full max-w-sm place-items-center justify-self-center rounded-md bg-secondary font-serif text-6xl sm:w-72 sm:justify-self-end lg:w-80" aria-label="Profile image unavailable">{initials}</div>;
 }

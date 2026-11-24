@@ -26,6 +26,7 @@ export const themes = [
   { id: "brutalist", name: "Brutalist", caption: "Acid · uncompromising" },
   { id: "aurora", name: "Aurora", caption: "Dark · immersive" },
   { id: "blueprint", name: "Blueprint", caption: "Precise · systems-led" },
+  { id: "montage", name: "Montage", caption: "Bold type · kinetic work" },
 ] as const;
 export type PortfolioTheme = typeof themes[number]["id"];
 export function parseTheme(value: unknown): PortfolioTheme {

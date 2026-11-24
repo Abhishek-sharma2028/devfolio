@@ -23,7 +23,7 @@ function ExamplePortfolio() {
   const portfolio = Route.useLoaderData();
   return <>
     <SiteBar><Button asChild variant="outline" size="sm"><Link to="/">Back to Devfolio</Link></Button></SiteBar>
-    <div className="border-b border-border bg-secondary px-6 py-3 text-center text-sm text-secondary-foreground">Fictional example · People, organisations, projects and outcomes are illustrative. Contact email is a placeholder.</div>
+    <div className="border-b border-border bg-secondary px-6 py-3 text-center text-sm text-secondary-foreground">Fictional example · Portrait is an illustrative stock photo. People, organisations, projects and outcomes are fictional. Contact email is a placeholder.</div>
     <PortfolioView portfolio={portfolio} imageSources={exampleImageSources} />
   </>;
 }

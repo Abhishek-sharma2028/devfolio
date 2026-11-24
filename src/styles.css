@@ -231,6 +231,39 @@
   --highlight: oklch(0.48 0.2 255); --accent: oklch(0.85 0.11 210);
   font-family: var(--font-mono);
 }
+[data-portfolio-theme="montage"] {
+  --background: #f8f1e9; --foreground: #10160d; --card: #d4f132;
+  --secondary: #b1fa91; --muted-foreground: #414838; --border: #252d1e;
+  --highlight: #9bbb0d; --accent: #d4f132; --ring: #6e8700;
+  font-family: var(--font-mono);
+}
+[data-portfolio-theme="montage"] main { max-width: 100%; padding-top: 0; }
+[data-portfolio-theme="montage"] .montage-nav { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 2px solid var(--foreground); font-size: .75rem; font-weight: 800; text-transform: uppercase; }
+[data-portfolio-theme="montage"] .montage-nav > a:first-child { font-size: 1.15rem; letter-spacing: -.08em; }
+[data-portfolio-theme="montage"] .montage-nav > div { display: flex; gap: clamp(.6rem, 3vw, 3rem); }
+[data-portfolio-theme="montage"] .montage-nav a:focus-visible { outline: 3px solid var(--ring); outline-offset: 4px; }
+[data-portfolio-theme="montage"] .montage-contact { display: flex; align-items: center; gap: .5rem; border: 2px solid var(--foreground); border-radius: 100px; background: var(--accent); padding: .65rem 1rem; }
+[data-portfolio-theme="montage"] .portfolio-intro { min-height: 600px; align-items: center; padding: clamp(2rem, 5vw, 5rem) 0; }
+[data-portfolio-theme="montage"] .portfolio-name, [data-portfolio-theme="montage"] .portfolio-heading, [data-portfolio-theme="montage"] .montage-manifesto strong { font-family: Impact, "Arial Narrow", sans-serif; font-stretch: condensed; text-transform: uppercase; letter-spacing: -.045em; line-height: .85; }
+[data-portfolio-theme="montage"] .portfolio-name { font-size: clamp(5rem, 13vw, 13rem); max-width: 100%; }
+[data-portfolio-theme="montage"] .portfolio-name .text-highlight { color: var(--highlight); }
+[data-portfolio-theme="montage"] .portfolio-intro > div:first-child > p:nth-of-type(1) { font-weight: 900; text-transform: uppercase; color: var(--foreground); }
+[data-portfolio-theme="montage"] .portfolio-intro > img, [data-portfolio-theme="montage"] .portfolio-intro > div:last-child { border: 3px solid var(--foreground); border-radius: 1rem; box-shadow: 12px 12px 0 var(--accent); }
+[data-portfolio-theme="montage"] .montage-manifesto { margin-inline: calc(-1 * clamp(1.5rem, 3vw, 2.5rem)); padding: clamp(3rem, 7vw, 7rem) clamp(1.5rem, 5vw, 6rem); background: #111b0c; color: #f8f1e9; }
+[data-portfolio-theme="montage"] .montage-manifesto span { display: block; margin-bottom: 2rem; font-size: .75rem; text-transform: uppercase; }
+[data-portfolio-theme="montage"] .montage-manifesto strong { display: block; font-size: clamp(3.5rem, 12vw, 11rem); }
+[data-portfolio-theme="montage"] .montage-manifesto mark { background: var(--accent); color: #111b0c; padding-inline: .1em; }
+[data-portfolio-theme="montage"] .montage-manifesto p { margin-top: 2rem; max-width: 65rem; line-height: 1.8; font-size: .85rem; text-transform: uppercase; }
+[data-portfolio-theme="montage"] .portfolio-heading { font-size: clamp(2.75rem, 7vw, 6rem); }
+[data-portfolio-theme="montage"] .portfolio-project-grid { display: flex; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: x mandatory; padding: 1rem 1rem 2rem 0; scrollbar-color: var(--foreground) var(--background); }
+[data-portfolio-theme="montage"] .portfolio-project { flex: 0 0 min(76vw, 430px); min-width: 0; scroll-snap-align: start; border: 2px solid var(--foreground); border-radius: 1.1rem; background: var(--accent); }
+[data-portfolio-theme="montage"] .portfolio-project:nth-child(3n+2) { background: #b1fa91; }
+[data-portfolio-theme="montage"] .portfolio-project:nth-child(3n+3) { background: #ffe14a; }
+[data-portfolio-theme="montage"] .portfolio-project button:hover { background: transparent; }
+[data-portfolio-theme="montage"] .portfolio-project h3 { font-family: Impact, "Arial Narrow", sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); text-transform: uppercase; line-height: 1; }
+[data-portfolio-theme="montage"] .portfolio-project .project-art { background: transparent; }
+[data-portfolio-theme="montage"] .portfolio-project .project-art-number { font-family: Impact, "Arial Narrow", sans-serif; color: var(--foreground); }
+@media (max-width: 640px) { [data-portfolio-theme="montage"] .montage-nav > div { display: none; } [data-portfolio-theme="montage"] .portfolio-name { font-size: clamp(4.5rem, 19vw, 8rem); } [data-portfolio-theme="montage"] .portfolio-intro { min-height: 0; } }
 .portfolio-view { overflow-wrap: anywhere; }
 .portfolio-view * { letter-spacing: 0; }
 [data-portfolio-theme="editorial"] .portfolio-name,
