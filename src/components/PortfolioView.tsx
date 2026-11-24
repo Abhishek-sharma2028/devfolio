@@ -3,6 +3,7 @@ import { ArrowUpRight, Github, Linkedin, Mail, Play, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { parseProfile, parseProjects, parseTheme, safeUrl, videoEmbed, type PortfolioProject } from "@/lib/portfolio";
+import { MazePortfolio } from "@/components/MazePortfolio";
 
 type Props = { portfolio: { name: string; role: string; location: string; bio: string; skills: string[]; projects: unknown; profile: unknown; theme: unknown } };
 
@@ -45,6 +46,7 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
     root.current?.querySelectorAll(".portfolio-reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [p]);
+  if (theme === "maze") return <MazePortfolio portfolio={p} imageSources={imageSources} />;
   return <div ref={root} data-portfolio-theme={theme} className="portfolio-view min-h-full bg-background text-foreground">
     <main className="mx-auto max-w-6xl px-6 py-12 sm:px-10 sm:py-20">
       {theme === "montage" && <nav className="montage-nav" aria-label="Portfolio sections"><a href="#montage-top">{p.name || "Portfolio"}</a><div><a href="#montage-stack">Stack</a><a href="#montage-work">Work</a><a href="#montage-about">About</a></div><a className="montage-contact" href={profile.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email) ? `mailto:${profile.email}` : "#montage-about"}>Say hello <ArrowUpRight className="size-4" /></a></nav>}
@@ -70,7 +72,7 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
           {projects.map((project, i) => <article key={i} className="portfolio-reveal portfolio-project group overflow-hidden rounded-md border border-border bg-card">
             <Button variant="ghost" onClick={() => setSelected(project)} className="h-auto w-full flex-col items-stretch gap-0 rounded-none p-0 text-left whitespace-normal hover:bg-card" aria-label={`Open ${project.name || "Untitled project"}`}>
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-secondary">
-                {safeUrl(project.images[0] ?? "") ? <PortfolioImage src={imageSources[project.images[0] ?? ""] ?? project.images[0]} alt={`${project.name || "Project"} cover`} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" fallback={<ProjectArtwork project={project} index={i} />} /> : <ProjectArtwork project={project} index={i} />}
+                {safeUrl(project.images[0] ?? "") ? <PortfolioImage src={imageSources[project.images[0] ?? ""] ?? project.images[0] ?? ""} alt={`${project.name || "Project"} cover`} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" fallback={<ProjectArtwork project={project} index={i} />} /> : <ProjectArtwork project={project} index={i} />}
                 {project.video && <span className="absolute left-4 bottom-4 flex items-center gap-2 bg-background px-3 py-2 text-xs"><Play className="size-3" /> Video</span>}
               </div>
               <div className="w-full p-5"><div className="mb-3 flex items-center justify-between gap-3 font-mono text-xs text-muted-foreground"><span>{project.category || "Case study"}</span><span>{project.year}</span></div><div className="flex items-start justify-between gap-4"><h3 className="break-words text-2xl font-semibold">{project.name || "Untitled project"}</h3><Plus className="mt-1 size-5 shrink-0 transition-transform duration-300 group-hover:rotate-90" /></div><p className="mt-3 line-clamp-2 font-normal leading-relaxed text-muted-foreground">{project.description || project.details || project.challenge}</p></div>

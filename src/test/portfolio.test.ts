@@ -28,7 +28,7 @@ describe("Rich portfolio data", () => {
       .toEqual(["https://example.com/one.jpg", "https://example.com/two.jpg"]);
     expect(parseProfile({ photo: "https://example.com/person.jpg" }).portrait).toBe("https://example.com/person.jpg");
   });
-  it("supports eleven themes with a safe fallback", () => { expect(themes.length).toBe(11); expect(parseTheme("montage")).toBe("montage"); expect(parseTheme("unknown")).toBe("editorial"); });
+  it("supports twelve themes with a safe fallback", () => { expect(themes.length).toBe(12); expect(parseTheme("montage")).toBe("montage"); expect(parseTheme("maze")).toBe("maze"); expect(parseTheme("unknown")).toBe("editorial"); });
   it("embeds supported video links only", () => { expect(videoEmbed("https://youtu.be/dQw4w9WgXcQ")).toBe("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"); expect(videoEmbed("https://vimeo.com/123456")).toBe("https://player.vimeo.com/video/123456"); expect(videoEmbed("https://youtube.com.evil.test/watch?v=dQw4w9WgXcQ")).toBeUndefined(); });
   it("rejects executable links", () => { expect(safeUrl("javascript:alert(1)")).toBeUndefined(); expect(safeUrl("https://example.com")).toBe("https://example.com/"); });
 });

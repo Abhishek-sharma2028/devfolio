@@ -4,7 +4,7 @@ import { emptyProject, parseProfile, type PortfolioProject, type PortfolioTheme 
 
 const campus = "https://example.invalid/campus.jpg";
 const finance = "https://example.invalid/finance.jpg";
-const portraits = Object.fromEntries(["alex", "arjun", "sana", "noor", "dev", "mira", "kabir"].map((name) => [`https://example.invalid/portrait-${name}.jpg`, `/devfolio/portraits/${name}.jpg`]));
+const portraits = Object.fromEntries(["alex", "arjun", "sana", "noor", "dev", "mira", "kabir", "leena"].map((name) => [`https://example.invalid/portrait-${name}.jpg`, `/devfolio/portraits/${name}.jpg`]));
 export const exampleImageSources = { [campus]: campusImage, [finance]: financeImage, ...portraits };
 
 function project(data: Partial<PortfolioProject>): PortfolioProject {
@@ -13,6 +13,17 @@ function project(data: Partial<PortfolioProject>): PortfolioProject {
 
 // All people, institutions, clients and outcomes in these examples are fictional.
 export const examplePortfolios = [
+  {
+    slug: "leena-rao", name: "Leena Rao", role: "Creative developer", location: "Bengaluru, India", theme: "maze" as PortfolioTheme,
+    bio: "I build playful interfaces that make complex ideas approachable. My work moves between creative coding, product design and practical engineering, with accessibility built into every experiment.",
+    skills: ["TypeScript", "React", "Creative coding", "Interaction design", "Accessibility", "WebGL"],
+    profile: { ...parseProfile(null), headline: "Curious code for the people who use it.", availability: "Available for collaborations", email: "leena@example.com", experience: "2025–2026 · Creative developer, Lantern Studio (fictional)\nDesigned and built interactive web experiences for cultural and educational teams.\n2024–2025 · Frontend engineer, Common Ground (fictional)\nWorked on accessible product interfaces and design systems.", education: "B.Des in Interaction Design, South City Institute (fictional)", achievements: "Built an open collection of keyboard-friendly creative coding examples (fictional)", interests: "Indie games, map making, paper sculptures and small neighborhood libraries." },
+    projects: [
+      project({ name: "Field Guide", category: "Interactive learning", year: "2026", images: [campus], technologies: "React · TypeScript · Canvas", contribution: "Interaction design, front-end implementation and keyboard testing.", description: "A fictional exploration tool that helps students discover urban ecology through illustrated neighborhood maps.", challenge: "Static lessons made it difficult to connect observations with the places where they happened.", solution: "Created navigable map chapters with descriptive text and a clear linear reading option.", results: "The prototype illustrates how playful discovery and a readable fallback can work together." }),
+      project({ name: "Soft Signals", category: "Data story", year: "2025", images: [finance], technologies: "D3 · React · SVG", contribution: "Data narrative, visual design and responsive implementation.", description: "A fictional data story about the rhythms of shared city spaces, told through small interactive scenes.", challenge: "A dense dataset hid the human patterns behind daily movement.", solution: "Turned the data into concise chapters with plain language summaries and accessible controls.", results: "The concept makes the source and limits of each chart visible to readers." }),
+      project({ name: "Play Pattern", category: "Creative tool", year: "2025", technologies: "TypeScript · Web Audio · Canvas", contribution: "Concept, prototyping and interface development.", description: "A fictional browser playground for composing visual patterns and soft sound loops.", challenge: "Creative tools often require prior technical knowledge before a visitor can make anything.", solution: "Designed an inviting set of presets and direct manipulation controls, with reduced motion support.", results: "The prototype offers a quick first success while leaving room to experiment." }),
+    ],
+  },
   {
     slug: "alex-rivera", name: "Alex Rivera", role: "Full-stack developer", location: "Austin, USA", theme: "montage" as PortfolioTheme,
     bio: "I turn complex product ideas into fast, accessible interfaces and reliable systems. My work spans the browser, APIs and the testing that keeps releases dependable.",
