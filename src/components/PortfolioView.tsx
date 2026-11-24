@@ -1,10 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, Github, Linkedin, Mail, Play, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { parseProfile, parseProjects, parseTheme, safeUrl, videoEmbed, type PortfolioProject } from "@/lib/portfolio";
 
 type Props = { portfolio: { name: string; role: string; location: string; bio: string; skills: string[]; projects: unknown; profile: unknown; theme: unknown } };
+
+function PortfolioImage({ src, alt, className, fallback }: { src: string; alt: string; className: string; fallback: ReactNode }) {
+  const [failed, setFailed] = useState(false);
+  useEffect(() => setFailed(false), [src]);
+  if (failed) return fallback;
+  return <img src={src} alt={alt} className={className} loading="lazy" referrerPolicy="no-referrer" onError={() => setFailed(true)} />;
+}
 
 function ProjectVideo({ link }: { link: string }) {
   const embed = videoEmbed(link);
@@ -19,7 +26,7 @@ function CaseStudy({ project, imageSources }: { project: PortfolioProject; image
   return <>
     <DialogTitle className="pr-6 text-3xl">{project.name || "Untitled project"}</DialogTitle>
     <DialogDescription>{[project.category, project.year, project.contribution].filter(Boolean).join(" · ") || "Project case study"}</DialogDescription>
-    {project.images.filter((url) => safeUrl(url)).map((url, i) => <img key={`${url}-${i}`} src={imageSources[url] ?? url} alt={`${project.name} — image ${i + 1}`} className="max-h-96 w-full rounded-md object-contain bg-secondary" loading="lazy" />)}
+    {project.images.filter((url) => safeUrl(url)).map((url, i) => <PortfolioImage key={`${url}-${i}`} src={imageSources[url] ?? url} alt={`${project.name || "Project"} — image ${i + 1}`} className="max-h-96 w-full rounded-md bg-secondary object-contain" fallback={<div className="grid aspect-video w-full place-items-center rounded-md bg-secondary px-6 text-center text-sm text-muted-foreground">Image could not be loaded</div>} />)}
     <p className="whitespace-pre-wrap leading-relaxed">{project.description || project.details}</p>
     {[["Technologies", project.technologies], ["My contribution", project.contribution], ["The challenge", project.challenge], ["The solution", project.solution], ["Results & learnings", project.results]].map(([label, text]) => text ? <section key={label}><h3 className="mb-2 text-lg font-semibold">{label}</h3><p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">{text}</p></section> : null)}
     <ProjectVideo link={project.video} />
@@ -53,7 +60,7 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
             {[["GitHub", profile.github, Github], ["LinkedIn", profile.linkedin, Linkedin], ["Website", profile.website, ArrowUpRight], ["Résumé", profile.resume, ArrowUpRight]].map(([label, url, Icon]) => { const href = safeUrl(String(url)); const Symbol = Icon as typeof Github; return href ? <Button asChild variant="ghost" key={String(label)}><a href={href} target="_blank" rel="noopener noreferrer"><Symbol className="size-4" />{String(label)}</a></Button> : null; })}
           </div>
         </div>
-        {safeUrl(profile.portrait) && <img src={profile.portrait} alt={p.name || "Profile portrait"} className="aspect-square w-36 rounded-md object-cover sm:w-48" />}
+        {safeUrl(profile.portrait) ? <PortfolioImage src={profile.portrait} alt={`${p.name || "Portfolio owner"} profile portrait`} className="aspect-square w-36 rounded-md object-cover sm:w-48" fallback={<ProfileArtwork name={p.name} />} /> : <ProfileArtwork name={p.name} />}
       </header>
       <section className="py-12">
         <div className="mb-8 flex items-baseline justify-between"><h2 className="portfolio-heading text-3xl font-semibold">Selected work</h2><span className="font-mono text-sm text-muted-foreground">{String(projects.length).padStart(2, "0")} projects</span></div>
@@ -61,7 +68,7 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
           {projects.map((project, i) => <article key={i} className="portfolio-reveal portfolio-project group overflow-hidden rounded-md border border-border bg-card">
             <Button variant="ghost" onClick={() => setSelected(project)} className="h-auto w-full flex-col items-stretch gap-0 rounded-none p-0 text-left whitespace-normal hover:bg-card" aria-label={`Open ${project.name || "Untitled project"}`}>
               <div className="relative aspect-[16/10] w-full overflow-hidden bg-secondary">
-                {safeUrl(project.images[0] ?? "") ? <img src={imageSources[project.images[0] ?? ""] ?? project.images[0]} alt={project.name} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" /> : <div className="project-art h-full w-full p-6"><span className="font-mono text-xs">{project.category || "PROJECT"}</span><span className="project-art-number">{String(i + 1).padStart(2, "0")}</span><ArrowUpRight className="absolute bottom-6 right-6 size-10" /></div>}
+                {safeUrl(project.images[0] ?? "") ? <PortfolioImage src={imageSources[project.images[0] ?? ""] ?? project.images[0]} alt={`${project.name || "Project"} cover`} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" fallback={<ProjectArtwork project={project} index={i} />} /> : <ProjectArtwork project={project} index={i} />}
                 {project.video && <span className="absolute left-4 bottom-4 flex items-center gap-2 bg-background px-3 py-2 text-xs"><Play className="size-3" /> Video</span>}
               </div>
               <div className="w-full p-5"><div className="mb-3 flex items-center justify-between gap-3 font-mono text-xs text-muted-foreground"><span>{project.category || "Case study"}</span><span>{project.year}</span></div><div className="flex items-start justify-between gap-4"><h3 className="break-words text-2xl font-semibold">{project.name || "Untitled project"}</h3><Plus className="mt-1 size-5 shrink-0 transition-transform duration-300 group-hover:rotate-90" /></div><p className="mt-3 line-clamp-2 font-normal leading-relaxed text-muted-foreground">{project.description || project.details || project.challenge}</p></div>
@@ -74,4 +81,13 @@ export function PortfolioView({ portfolio: p, imageSources = {} }: Props & { ima
     </main>
     <Dialog open={!!selected} onOpenChange={(open) => { if (!open) setSelected(null); }}><DialogContent data-portfolio-theme={theme} className="portfolio-view max-h-[90dvh] max-w-3xl overflow-y-auto bg-background text-foreground">{selected && <CaseStudy project={selected} imageSources={imageSources} />}</DialogContent></Dialog>
   </div>;
+}
+
+function ProjectArtwork({ project, index }: { project: PortfolioProject; index: number }) {
+  return <div className="project-art h-full w-full p-6"><span className="font-mono text-xs">{project.category || "PROJECT"}</span><span className="project-art-number">{String(index + 1).padStart(2, "0")}</span><ArrowUpRight className="absolute bottom-6 right-6 size-10" /></div>;
+}
+
+function ProfileArtwork({ name }: { name: string }) {
+  const initials = name.trim().split(/\s+/).slice(0, 2).map((part) => part.charAt(0)).join("").toUpperCase() || "?";
+  return <div className="grid aspect-square w-36 place-items-center rounded-md bg-secondary font-serif text-4xl sm:w-48" aria-label="Profile image unavailable">{initials}</div>;
 }

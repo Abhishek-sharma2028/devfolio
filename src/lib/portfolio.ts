@@ -22,6 +22,10 @@ export const themes = [
   { id: "botanical", name: "Botanical", caption: "Green · considered" },
   { id: "terminal", name: "Terminal", caption: "Mono · technical" },
   { id: "swiss", name: "Swiss", caption: "Red · graphic" },
+  { id: "bento", name: "Bento", caption: "Modular · product-led" },
+  { id: "brutalist", name: "Brutalist", caption: "Acid · uncompromising" },
+  { id: "aurora", name: "Aurora", caption: "Dark · immersive" },
+  { id: "blueprint", name: "Blueprint", caption: "Precise · systems-led" },
 ] as const;
 export type PortfolioTheme = typeof themes[number]["id"];
 export function parseTheme(value: unknown): PortfolioTheme {
@@ -38,7 +42,14 @@ export const profileFields = [
 export type PortfolioProfile = Record<typeof profileFields[number][0], string>;
 export function parseProfile(value: unknown): PortfolioProfile {
   const source = value && typeof value === "object" ? value as Record<string, unknown> : {};
-  return Object.fromEntries(profileFields.map(([key]) => [key, String(source[key] ?? "")])) as PortfolioProfile;
+  const profile = Object.fromEntries(profileFields.map(([key]) => [key, String(source[key] ?? "")])) as PortfolioProfile;
+  if (!profile.portrait) {
+    const legacyPortrait = ["photo", "photoUrl", "photo_url", "avatar", "avatarUrl", "avatar_url", "image", "imageUrl", "image_url"]
+      .map((key) => source[key])
+      .find((candidate): candidate is string => typeof candidate === "string" && Boolean(candidate.trim()));
+    profile.portrait = legacyPortrait?.trim() ?? "";
+  }
+  return profile;
 }
 export function emptyProject(): PortfolioProject {
   return { name: "", link: "", details: "", description: "", category: "", year: "", contribution: "", technologies: "", challenge: "", solution: "", results: "", repository: "", video: "", images: [] };
@@ -76,6 +87,22 @@ export function parseProjects(value: unknown): PortfolioProject[] {
   if (!Array.isArray(value)) return [];
   return value.map((p) => {
     const o = (p ?? {}) as Record<string, unknown>;
+    const imageValues = [
+      o["images"], o["gallery"], o["media"], o["image"], o["imageUrl"], o["image_url"],
+      o["thumbnail"], o["thumbnailUrl"], o["thumbnail_url"], o["cover"], o["coverImage"], o["cover_image"],
+    ];
+    const images = imageValues.flatMap((candidate) => {
+      const values = Array.isArray(candidate) ? candidate : candidate == null ? [] : [candidate];
+      return values.flatMap((image) => {
+        if (typeof image === "string") return image.split(/\r?\n/);
+        if (image && typeof image === "object") {
+          const item = image as Record<string, unknown>;
+          const url = item["url"] ?? item["src"] ?? item["href"];
+          return typeof url === "string" ? [url] : [];
+        }
+        return [];
+      });
+    }).map((image) => image.trim()).filter(Boolean);
     return {
       ...emptyProject(),
       name: String(o["name"] ?? ""),
@@ -83,7 +110,7 @@ export function parseProjects(value: unknown): PortfolioProject[] {
       details: String(o["details"] ?? ""),
       description: String(o["description"] ?? ""),
       ...Object.fromEntries(["category", "year", "contribution", "technologies", "challenge", "solution", "results", "repository", "video"].map((key) => [key, String(o[key] ?? "")])),
-      images: Array.isArray(o["images"]) ? o["images"].filter((image): image is string => typeof image === "string") : [],
+      images: [...new Set(images)],
     };
   });
 }

@@ -143,8 +143,8 @@ function Editor() {
         </section>
 
         <section className="grid gap-4">
-          <div className="flex items-baseline justify-between"><h2 className="text-2xl font-semibold">Make it yours</h2><span className="font-mono text-xs text-muted-foreground">06 themes</span></div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6" role="group" aria-label="Portfolio theme">
+          <div className="flex items-baseline justify-between"><h2 className="text-2xl font-semibold">Make it yours</h2><span className="font-mono text-xs text-muted-foreground">{String(themes.length).padStart(2, "0")} themes</span></div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5" role="group" aria-label="Portfolio theme">
             {themes.map((theme) => <Button key={theme.id} variant="outline" aria-pressed={form.theme === theme.id} onClick={() => set("theme", theme.id)} className={`theme-option h-auto flex-col items-stretch gap-0 overflow-hidden p-0 text-left ${form.theme === theme.id ? "ring-2 ring-ring" : ""}`}>
               <span data-portfolio-theme={theme.id} className="theme-swatch relative flex aspect-[4/3] flex-col justify-center gap-2 bg-background p-4 text-foreground"><span className="portfolio-name text-2xl">Aa<span className="text-highlight">.</span></span><span className="h-1 w-3/4 bg-foreground"/><span className="h-1 w-1/2 bg-highlight"/>{form.theme === theme.id && <Check className="absolute right-2 top-2 size-4" />}</span>
               <span className="p-3"><span className="block text-sm font-semibold">{theme.name}</span><span className="block text-[10px] font-normal text-muted-foreground">{theme.caption}</span></span>

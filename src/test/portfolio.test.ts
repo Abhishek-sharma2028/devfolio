@@ -21,7 +21,14 @@ describe("Rich portfolio data", () => {
     expect(project?.video).toBe("https://youtu.be/dQw4w9WgXcQ");
   });
   it("keeps old portfolios compatible", () => { expect(parseProjects([{ name: "Old" }])[0]?.images).toEqual([]); expect(parseProfile(null).experience).toBe(""); });
-  it("supports six themes with a safe fallback", () => { expect(themes.length).toBe(6); expect(parseTheme("noir")).toBe("noir"); expect(parseTheme("unknown")).toBe("editorial"); });
+  it("recovers images from legacy portfolio fields", () => {
+    expect(parseProjects([{ image: " https://example.com/cover.jpg ", gallery: [{ src: "https://example.com/detail.jpg" }] }])[0]?.images)
+      .toEqual(["https://example.com/detail.jpg", "https://example.com/cover.jpg"]);
+    expect(parseProjects([{ images: "https://example.com/one.jpg\nhttps://example.com/two.jpg" }])[0]?.images)
+      .toEqual(["https://example.com/one.jpg", "https://example.com/two.jpg"]);
+    expect(parseProfile({ photo: "https://example.com/person.jpg" }).portrait).toBe("https://example.com/person.jpg");
+  });
+  it("supports ten themes with a safe fallback", () => { expect(themes.length).toBe(10); expect(parseTheme("aurora")).toBe("aurora"); expect(parseTheme("unknown")).toBe("editorial"); });
   it("embeds supported video links only", () => { expect(videoEmbed("https://youtu.be/dQw4w9WgXcQ")).toBe("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"); expect(videoEmbed("https://vimeo.com/123456")).toBe("https://player.vimeo.com/video/123456"); expect(videoEmbed("https://youtube.com.evil.test/watch?v=dQw4w9WgXcQ")).toBeUndefined(); });
   it("rejects executable links", () => { expect(safeUrl("javascript:alert(1)")).toBeUndefined(); expect(safeUrl("https://example.com")).toBe("https://example.com/"); });
 });
