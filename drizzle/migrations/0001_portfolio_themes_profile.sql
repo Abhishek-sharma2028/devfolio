@@ -1,0 +1,1 @@
+ALTER TABLE public.portfolios ADD COLUMN theme text NOT NULL DEFAULT 'editorial', ADD COLUMN profile jsonb NOT NULL DEFAULT '{}'::jsonb;

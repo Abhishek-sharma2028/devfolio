@@ -1,3 +1,4 @@
+(() => {
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('.section-snap');
 const reveals = document.querySelectorAll('.reveal');
@@ -876,3 +877,5 @@ window.addEventListener('scroll', () => {
   document.documentElement.style.setProperty('--scroll-velocity', velocity.toFixed(2));
   lastScrollY = window.scrollY;
 }, { passive: true });
+
+})();

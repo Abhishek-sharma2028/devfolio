@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794339634225,
+      "tag": "0000_create_portfolios",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794396820831,
+      "tag": "0001_portfolio_themes_profile",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794470853162,
+      "tag": "0002_ai_portfolio_search_access_blocks",
+      "breakpoints": true
+    }
+  ]
+}
