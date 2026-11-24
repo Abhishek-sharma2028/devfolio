@@ -18,8 +18,27 @@ Prefer working locally? You need Node.js and npm — [install with nvm](https://
 git clone <this-repository-url>
 cd <repository-name>
 npm i
+```
+
+Copy `.env.example` to `.env.local` before starting the app. `.env.local` is
+ignored by Git and must remain local:
+
+```sh
+cp .env.example .env.local
 npm run dev
 ```
+
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080). For Google and Lovable
+sign-in to return to the local app, add this URL in **Lovable Cloud →
+Authentication → Advanced → Redirect URLs**:
+
+```text
+http://127.0.0.1:8080/**
+```
+
+The Vite development server forwards the local `~oauth/initiate` route to
+Lovable's managed OAuth broker. Google credentials and `LOVABLE_API_KEY` stay
+in Lovable Cloud and must not be added to `.env.local` or committed.
 
 ## Built with
 
