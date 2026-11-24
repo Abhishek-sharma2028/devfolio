@@ -21,8 +21,6 @@ npm i
 npm run dev
 ```
 
-On Windows, you can also double-click `run.bat`. It installs dependencies if needed, then starts the development server.
-
 ## Built with
 
 - TanStack Start

@@ -1,0 +1,46 @@
+{
+ "capabilities": [
+  {
+   "capability": "code/pages/styles/interactions",
+   "source": "index.html, styles.css, script.js",
+   "outcome": "migrate",
+   "status": "verified",
+   "next_action": "none"
+  },
+  {
+   "capability": "database/records",
+   "source": "none (browser storage only)",
+   "outcome": "not applicable",
+   "status": "verified",
+   "next_action": "none"
+  },
+  {
+   "capability": "auth",
+   "source": "demo sign-in saved in browser storage, no server accounts",
+   "outcome": "preserved as demo",
+   "status": "verified",
+   "next_action": "optional: real accounts via Lovable Cloud"
+  },
+  {
+   "capability": "external media",
+   "source": "Unsplash images, YouTube/Vimeo embeds, Google Fonts",
+   "outcome": "preserved",
+   "status": "verified",
+   "next_action": "none"
+  },
+  {
+   "capability": "hosting/cutover",
+   "source": "GitHub Pages workflow",
+   "outcome": "replaced by Lovable publish",
+   "status": "pending",
+   "next_action": "publish"
+  },
+  {
+   "capability": "secrets/webhooks/schedules/payments",
+   "source": "none",
+   "outcome": "not applicable",
+   "status": "verified",
+   "next_action": "none"
+  }
+ ]
+}
